@@ -1,17 +1,19 @@
 package ru.tyanmt.task.common;
 
+import static ru.tyanmt.task.common.FaceHandler.*;
+
 /**
  * Created by mityan on 07.08.2015.
  */
 public class Cube3D {
     int[][][] cube = new int[5][5][5];
 
-    public Cube3D(){
+    public Cube3D() {
         this.cube = new int[5][5][5];
     }
 
-    public Cube3D(int[][][] cube){
-        this.cube=cube;
+    public Cube3D(int[][][] cube) {
+        this.cube = cube;
     }
 
     int[][] cubeInt = new int[5][5];
@@ -28,52 +30,23 @@ public class Cube3D {
 
     public void placeOnTop(Face3D faceCandidate) {
         Face3D cubeFace = this.getTop();
-        if (facesConnected(faceCandidate, cubeFace)){
-            for (int i = 0; i < 5; i++) {
-                for (int j = 0; j < 5; i++) {
-                    cube[i][4][j] = faceCandidate.getFace()[i][j];
-                }
+        int i = 0;
+        while (!isAppropriateFace(faceCandidate, cubeFace) && i<8) {
+            faceCandidate.setFace(rotateClockwise(faceCandidate));
+            i++;
+            if (i == 4) {
+                faceCandidate.setFace(flipFace(faceCandidate));
             }
-        } else {
-
-        };
-
+        }
+        if (i==8) return;
+        addFaceOnTopOfCube(faceCandidate);
     }
 
-    private boolean facesConnected(Face3D faceCandidate, Face3D cubeFace) {
+    private void addFaceOnTopOfCube(Face3D faceCandidate) {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; i++) {
-                if (cubeFace.getFace()[i][j]!=0){
-                    if (faceCandidate.getFace()[i][j]!=0){
-                        return false;
-                    }
-                }else{
-                    if (faceCandidate.getFace()[i][j]==0) {
-                        if (isVertex(i, j)){
-                            if (!isAdjacentSidesEmpty(cubeFace, i, j)) return false;
-                            //TODO if vertex is not accesible
-                        }
-                    }
-                }
+                cube[i][4][j] = faceCandidate.getFace()[i][j];
             }
         }
-        return true;
-    }
-
-    private boolean isAdjacentSidesEmpty(Face3D cubeFace, int i, int j) {
-        boolean sideIsEmpty = true;
-        for (int k = 0; k < 5; k++) {
-            if (cubeFace.getFace()[i][k]!=0) {
-                if (!sideIsEmpty) {return false;} else { sideIsEmpty = false;}
-            }
-            if (cubeFace.getFace()[k][j]!=0) {
-                if (!sideIsEmpty) {return false;} else { sideIsEmpty = false;}
-            }
-        }
-        return true;
-    }
-
-    private boolean isVertex(int i, int j) {
-        return (i == 0 && j == 0)||(i == 0 && j == 5) || (i == 5 && j == 0) || (i == 5 && j == 0);
     }
 }

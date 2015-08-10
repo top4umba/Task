@@ -4,7 +4,7 @@ package ru.tyanmt.task.common;
  * Created by mityan on 10.08.2015.
  */
 public class Face3D {
-    private final int[][] face;
+    private int[][] face;
 
     public Face3D(){
         this.face = new int[5][5];
@@ -16,5 +16,9 @@ public class Face3D {
 
     public int[][] getFace() {
         return face;
+    }
+
+    public void setFace(int[][] face) {
+        this.face = face;
     }
 }
