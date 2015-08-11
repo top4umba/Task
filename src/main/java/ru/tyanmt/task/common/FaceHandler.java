@@ -7,8 +7,8 @@ public class FaceHandler {
 
     public static int[][] flipFace(Face3D face) {
         int[][] faceMatrix = new int[5][5];
-        for (int i = 0; i <5 ; i++) {
-            faceMatrix[i] = face.getFace()[5-1-i];
+        for (int i = 0; i < 5; i++) {
+            faceMatrix[i] = face.getFace()[5 - 1 - i];
         }
         return faceMatrix;
     }
@@ -26,18 +26,16 @@ public class FaceHandler {
     public static boolean isAppropriateFace(Face3D faceCandidate, Face3D cubeFace) {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                if (cubeFace.getFace()[i][j] != 0) {
-                    if (faceCandidate.getFace()[i][j] != 0) {
+                if (!isEmpty(cubeFace.getFace()[i][j])) {
+                    if (!isEmpty(faceCandidate.getFace()[i][j])) {
                         return false;
                     }
                 } else {
-                    if (faceCandidate.getFace()[i][j] == 0) {
+                    if (isEmpty(faceCandidate.getFace()[i][j])) {
                         if (isVertex(i, j)) {
-                            if (!isAdjacentSidesEmpty(cubeFace, i, j)) return false;
+                            if (!isBothAdjacentEdgesEmpty(cubeFace, i, j)) return false;
                         } else {
-                            if (isEdge(i,j)) {
-                                //TODO if is edge and (not null cubeFace edge, or not null vertices and not the same number as adjacent side)==notEmpty, then false
-                            };
+                            if (isEdge(i, j) && !isAdjacentEdgeEmpty(cubeFace, i, j)) return false;
                         }
                     }
                 }
@@ -46,32 +44,23 @@ public class FaceHandler {
         return true;
     }
 
-    private static boolean isAdjacentSidesEmpty(Face3D cubeFace, int i, int j) {
-        boolean sideIsEmpty = true;
-        for (int k = 0; k < 5; k++) {
-            if (cubeFace.getFace()[i][k] != 0) {
-                if (!sideIsEmpty) {
-                    return false;
-                } else {
-                    sideIsEmpty = false;
-                }
-            }
-            if (cubeFace.getFace()[k][j] != 0) {
-                if (!sideIsEmpty) {
-                    return false;
-                } else {
-                    sideIsEmpty = false;
-                }
-            }
-        }
-        return true;
+    private static boolean isEmpty(int i) {
+        return i == 0;
+    }
+
+    private static boolean isAdjacentEdgeEmpty(Face3D face, int i, int j) {
+        return face.getAdjacentFaces()[i == 0 || i == 4 ? i / 2 : 1][j == 0 || j == 4 ? j / 2 : 1] == 0;
+    }
+
+    private static boolean isBothAdjacentEdgesEmpty(Face3D face, int i, int j) {
+        return face.getAdjacentFaces()[i / 2][1] == 0 && face.getAdjacentFaces()[1][j / 2] == 0;
     }
 
     private static boolean isVertex(int i, int j) {
         return (i == 0 && j == 0) || (i == 0 && j == 4) || (i == 4 && j == 0) || (i == 4 && j == 0);
     }
 
-    private static boolean isEdge(int i, int j) {
-        return i == 0 || i ==4 || j==0 || j == 4;
+    public static boolean isEdge(int i, int j) {
+        return i == 0 || i == 4 || j == 0 || j == 4;
     }
 }

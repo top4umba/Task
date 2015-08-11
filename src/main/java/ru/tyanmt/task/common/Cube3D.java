@@ -23,22 +23,27 @@ public class Cube3D {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; i++) {
                 face.getFace()[i][j] = cube[i][4][j];
+                if (isEdge(i, j) && (i == 2 || j == 2)) {
+                    face.getAdjacentFaces()[i/2][j/2]=cube[i][3][j];
+                }
             }
         }
+
         return face;
     }
 
     public void placeOnTop(Face3D faceCandidate) {
         Face3D cubeFace = this.getTop();
+        //TODO check whether vertices accessible
         int i = 0;
-        while (!isAppropriateFace(faceCandidate, cubeFace) && i<8) {
+        while (!isAppropriateFace(faceCandidate, cubeFace) && i < 8) {
             faceCandidate.setFace(rotateClockwise(faceCandidate));
             i++;
             if (i == 4) {
                 faceCandidate.setFace(flipFace(faceCandidate));
             }
         }
-        if (i==8) return;
+        if (i == 8) return;
         addFaceOnTopOfCube(faceCandidate);
     }
 

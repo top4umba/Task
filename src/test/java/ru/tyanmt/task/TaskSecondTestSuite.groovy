@@ -62,8 +62,15 @@ public class TaskSecondTestSuite {
             [0,0,0,0,0],
             [0,3,0,3,3],
     ]
+        Face3D cubeFace = new Face3D(faceCubeMatrix);
+        int[][] adjacentEdges = [
+                [0,5,0],
+                [2,0,4],
+                [0,3,0]
+        ]
+        cubeFace.setAdjacentFaces(adjacentEdges);
     //when
-    boolean canBePlaced = isAppropriateFace(new Face3D(faceCandidateMatrix), new Face3D(faceCubeMatrix));
+    boolean canBePlaced = isAppropriateFace(new Face3D(faceCandidateMatrix), cubeFace);
     //then
     assertThat canBePlaced, is(true)
     }
@@ -85,8 +92,15 @@ public class TaskSecondTestSuite {
                 [0,0,0,0,0],
                 [0,0,0,0,0],
         ]
+        Face3D cubeFace = new Face3D(faceCubeMatrix);
+        int[][] adjacentEdges = [
+                [0,2,0],
+                [0,0,0],
+                [0,0,0]
+        ]
+        cubeFace.setAdjacentFaces(adjacentEdges);
         //when
-        boolean canBePlaced = isAppropriateFace(new Face3D(faceCandidateMatrix), new Face3D(faceCubeMatrix));
+        boolean canBePlaced = isAppropriateFace(new Face3D(faceCandidateMatrix), cubeFace);
         //then
         assertThat canBePlaced, is(false)
     }
@@ -108,8 +122,15 @@ public class TaskSecondTestSuite {
                 [0,0,0,0,0],
                 [0,0,0,0,0],
         ]
+        Face3D cubeFace = new Face3D(faceCubeMatrix);
+        int[][] adjacentEdges = [
+                [0,0,0],
+                [2,0,0],
+                [0,0,0]
+        ]
+        cubeFace.setAdjacentFaces(adjacentEdges);
         //when
-        boolean canBePlaced = isAppropriateFace(new Face3D(faceCandidateMatrix), new Face3D(faceCubeMatrix));
+        boolean canBePlaced = isAppropriateFace(new Face3D(faceCandidateMatrix), cubeFace);
         //then
         assertThat canBePlaced, is(false)
     }
