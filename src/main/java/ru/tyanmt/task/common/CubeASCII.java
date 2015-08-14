@@ -1,5 +1,8 @@
 package ru.tyanmt.task.common;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by mityan on 10.08.2015.
  */
@@ -17,8 +20,8 @@ public class CubeASCII {
                     "oooo ooooo oooo" +
                     "oo o o o  oo oo";
 
-    public Face3D getFace(int faceNumber) {
-        Face3D face = new Face3D();
+    public Face getFace(int faceNumber) {
+        Face face = new Face();
         if (faceNumber < 1 || faceNumber > 6) {
             throw new IllegalArgumentException("Number of face should be in range 1 and 6");
         }
@@ -34,6 +37,15 @@ public class CubeASCII {
             position += 15;
         }
         return face;
+    }
+
+
+    public List<Face> getFaces() {
+        List<Face> faces = new ArrayList<>();
+        for (int i = 1; i < 7; i++) {
+            faces.add(getFace(i));
+        }
+        return faces;
     }
 
 }

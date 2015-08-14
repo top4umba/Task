@@ -1,8 +1,8 @@
 package ru.tyanmt.task;
 
-import ru.tyanmt.task.cubes.BlueCube;
+import ru.tyanmt.task.common.Cube;
+import ru.tyanmt.task.common.CubeASCII;
 import ru.tyanmt.task.solution.CubeAssembler;
-import ru.tyanmt.task.solution.UnfoldedCube;
 import ru.tyanmt.task.util.Printer;
 
 /**
@@ -11,8 +11,7 @@ import ru.tyanmt.task.util.Printer;
 public class Main {
     public static void main(String[] args) {
         CubeAssembler assembler = new CubeAssembler();
-        UnfoldedCube unfoldedCube = assembler.assembleCube(new BlueCube());
-        Printer.print(unfoldedCube);
+        assembler.assembleCube(new CubeASCII());
     }
 
 }
