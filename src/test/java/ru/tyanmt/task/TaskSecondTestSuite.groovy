@@ -288,7 +288,7 @@ public class TaskSecondTestSuite {
                 topFace
         ]
         //when
-        Face face = new Cube(cube).getFace(2);
+        Face face = new Cube(cube).getFace(3);
         //then
         assertThat Arrays.deepEquals(face.face, topFace), is(true)
         assertThat Arrays.deepEquals(face.adjacentFaces, adjacentFaces), is(true)
@@ -344,8 +344,8 @@ public class TaskSecondTestSuite {
         ]
         Cube cube = new Cube(cubeArray)
         //when
-        cube.putFaceOn(2, new Face(face))
-        Face topFace = cube.getFace(2)
+        cube.putFaceOn(3, new Face(face))
+        Face topFace = cube.getFace(3)
         //then
         assertThat Arrays.deepEquals(controlFace, topFace.face), is(true)
     }

@@ -29,15 +29,17 @@ public class CubeAssembler {
 
     private void addFace(Cube cube, int faceNumber, List<Face> faces){
         for (Face face : faces) {
-            List<Face> remainingFaces = new ArrayList<>(faces);
+            final List<Face> remainingFaces = new ArrayList<>(faces);
+            int size = remainingFaces.size();
             remainingFaces.remove(face);
+
             List<Face> rotateOptions = getRotateOptions(face);
             for (Face faceOption : rotateOptions) {
                 if (cube.putFaceOn(faceNumber,faceOption)){
                     if (remainingFaces.isEmpty()){
                         solutions.add(cube);
                     }else{
-                        addFace(new Cube(cube.getCube()), ++faceNumber, remainingFaces);
+                        addFace(new Cube(cube.getCube()), faceNumber +1, remainingFaces);
                     }
                 }
             }

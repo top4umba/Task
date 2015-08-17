@@ -1,5 +1,7 @@
 package ru.tyanmt.task.common;
 
+import java.util.Arrays;
+
 /**
  * Created by mityan on 10.08.2015.
  */
@@ -7,12 +9,12 @@ public class Face {
     private int[][] face;
     private int[][] adjacentFaces = new int[3][3];
 
-    public Face(){
+    public Face() {
         this.face = new int[5][5];
     }
 
-    public Face(int[][] face){
-        this.face=face;
+    public Face(int[][] face) {
+        this.face = face;
     }
 
     public int[][] getFace() {
@@ -29,5 +31,17 @@ public class Face {
 
     public void setAdjacentFaces(int[][] adjacentFaces) {
         this.adjacentFaces = adjacentFaces;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (!(o instanceof Face)) {
+            return false;
+        }
+
+        return Arrays.deepEquals(this.face,((Face) o).face);
     }
 }
