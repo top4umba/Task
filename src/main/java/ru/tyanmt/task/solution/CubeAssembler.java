@@ -7,15 +7,14 @@ import ru.tyanmt.task.common.Face;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.tyanmt.task.common.FaceHandler.flipFace;
 import static ru.tyanmt.task.common.FaceHandler.getRotateOptions;
-import static ru.tyanmt.task.common.FaceHandler.rotateClockwise;
 
 
 /**
  * Created by mityan on 03.08.2015.
  */
 public class CubeAssembler {
+
 
     List<Cube> solutions = new ArrayList<>();
 
@@ -27,27 +26,29 @@ public class CubeAssembler {
         return solutions;
     }
 
-    private void addFace(Cube cube, int faceNumber, List<Face> faces){
-        for (Face face : faces) {
-            final List<Face> remainingFaces = new ArrayList<>(faces);
-            int size = remainingFaces.size();
-            remainingFaces.remove(face);
-
-            List<Face> rotateOptions = getRotateOptions(face);
-            for (Face faceOption : rotateOptions) {
-                if (cube.putFaceOn(faceNumber,faceOption)){
-                    if (remainingFaces.isEmpty()){
-                        solutions.add(cube);
-                    }else{
-                        addFace(new Cube(cube.getCube()), faceNumber +1, remainingFaces);
+    private void addFace(Cube cube, int faceNumber, List<Face> faces) {
+        if (faces.size()==6){
+            cube.putFaceOn(faceNumber, faces.remove(0));
+            addFace(cube, faceNumber+1,faces);
+        }else{
+            for (Face face : faces) {
+                Cube cubeCandidate = new Cube(cube.getCube());
+                final List<Face> remainingFaces = new ArrayList<>(faces);
+                remainingFaces.remove(face);
+                List<Face> rotateOptions = getRotateOptions(face);
+                for (Face faceOption : rotateOptions) {
+                    if (cubeCandidate.putFaceOn(faceNumber, faceOption)) {
+                        if (remainingFaces.isEmpty()) {
+                            solutions.add(cubeCandidate);
+                        } else {
+                            addFace(cubeCandidate, faceNumber + 1, remainingFaces);
+                        }
                     }
                 }
             }
         }
+
     }
-
-
-
 
 
 }

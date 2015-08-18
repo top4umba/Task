@@ -4,11 +4,13 @@ import ru.tyanmt.task.common.Cube
 import ru.tyanmt.task.common.CubeASCII
 import ru.tyanmt.task.common.Face
 import ru.tyanmt.task.solution.CubeAssembler
+import ru.tyanmt.task.util.Printer
 
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.is
 import static org.junit.Assert.assertThat
 import static ru.tyanmt.task.common.FaceHandler.*
+import static ru.tyanmt.task.common.FaceMapper.getPointFromFace
 
 public class TaskSecondTestSuite {
 
@@ -297,50 +299,51 @@ public class TaskSecondTestSuite {
     @Test
     public void shouldPlaceOnTop() {
         //given
+        //TODO Fixed test with proper faces
         int[][] face = [
-                [4, 0, 0, 4, 4],
-                [4, 4, 4, 4, 0],
-                [0, 4, 4, 4, 0],
-                [4, 4, 4, 4, 0],
-                [4, 0, 4, 0, 4]
+                [3, 0, 0, 3, 3],
+                [3, 3, 3, 3, 0],
+                [0, 3, 3, 3, 0],
+                [3, 3, 3, 3, 0],
+                [3, 0, 3, 0, 3]
         ]
         int[][][] cubeArray = [
                 [[0, 2, 0, 2, 0],
-                 [1, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 3],
-                 [1, 0, 0, 0, 0],
+                 [6, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 4],
+                 [6, 0, 0, 0, 0],
                  [0, 0, 0, 0, 0]],
 
                 [[2, 2, 2, 2, 2],
-                 [1, 0, 0, 0, 3],
-                 [1, 0, 0, 0, 3],
-                 [1, 0, 0, 0, 3],
-                 [1, 0, 0, 0, 3]],
+                 [6, 0, 0, 0, 4],
+                 [6, 0, 0, 0, 4],
+                 [6, 0, 0, 0, 4],
+                 [6, 0, 0, 0, 4]],
 
-                [[1, 2, 2, 2, 3],
-                 [1, 0, 0, 0, 3],
-                 [1, 0, 0, 0, 3],
-                 [1, 0, 0, 0, 3],
-                 [1, 0, 0, 0, 3]],
+                [[6, 2, 2, 2, 4],
+                 [6, 0, 0, 0, 4],
+                 [6, 0, 0, 0, 4],
+                 [6, 0, 0, 0, 4],
+                 [6, 0, 0, 0, 4]],
 
                 [[2, 2, 2, 2, 2],
-                 [1, 0, 0, 0, 3],
-                 [1, 0, 0, 0, 3],
-                 [1, 0, 0, 0, 3],
-                 [1, 0, 0, 0, 3]],
+                 [6, 0, 0, 0, 4],
+                 [6, 0, 0, 0, 4],
+                 [6, 0, 0, 0, 4],
+                 [6, 0, 0, 0, 4]],
 
                 [[0, 2, 2, 0, 0],
-                 [0, 0, 0, 0, 3],
-                 [1, 0, 0, 0, 3],
-                 [0, 0, 0, 0, 3],
+                 [0, 0, 0, 0, 4],
+                 [6, 0, 0, 0, 4],
+                 [0, 0, 0, 0, 4],
                  [0, 0, 0, 0, 0]]
         ]
         int[][] controlFace = [
-                [4, 2, 2, 4, 4],
-                [4, 4, 4, 4, 3],
-                [1, 4, 4, 4, 3],
-                [4, 4, 4, 4, 3],
-                [4, 0, 4, 0, 4]
+                [3, 2, 2, 3, 3],
+                [3, 3, 3, 3, 4],
+                [6, 3, 3, 3, 4],
+                [3, 3, 3, 3, 4],
+                [3, 0, 3, 0, 3]
         ]
         Cube cube = new Cube(cubeArray)
         //when
@@ -348,6 +351,58 @@ public class TaskSecondTestSuite {
         Face topFace = cube.getFace(3)
         //then
         assertThat Arrays.deepEquals(controlFace, topFace.face), is(true)
+    }
+
+
+    @Test
+    public void shouldGetProperSide() {
+        //given
+        int[][][] cubeArray = [
+                [[0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 1, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0]],
+
+                [[0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0]],
+
+                [[0, 0, 2, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [6, 0, 0, 0, 4],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 5, 0, 0]],
+
+                [[0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0]],
+
+                [[0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 3, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0]]
+        ]
+        Cube cube = new Cube(cubeArray)
+        //when
+        int faceOne = getPointFromFace(1,2,2,cube.cube)
+        int faceTwo = getPointFromFace(2,2,2,cube.cube)
+        int faceThree = getPointFromFace(3,2,2,cube.cube)
+        int faceFour = getPointFromFace(4,2,2,cube.cube)
+        int faceFive = getPointFromFace(5,2,2,cube.cube)
+        int faceSix = getPointFromFace(6,2,2,cube.cube)
+        //then
+        assertThat faceOne, equalTo(1)
+        assertThat faceTwo, equalTo(2)
+        assertThat faceThree, equalTo(3)
+        assertThat faceFour, equalTo(4)
+        assertThat faceFive, equalTo(5)
+        assertThat faceSix, equalTo(6)
     }
 
     @Test
@@ -436,11 +491,13 @@ public class TaskSecondTestSuite {
         //when
         assembler.assembleCube(blueCube);
         //then
+        println assembler.solutions.size()
         if (!assembler.solutions.empty) {
-            Cube cube = assembler.solutions.first();
-            6.times { i ->
-                cube.getFace(i + 1).face.each { println it }
+            assembler.solutions.each {
                 println ""
+                println "-----------------------"
+                println ""
+                Printer.print it
             }
         }
     }

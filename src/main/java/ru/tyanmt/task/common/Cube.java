@@ -13,11 +13,17 @@ public class Cube {
     int[][][] cube = new int[5][5][5];
 
     public Cube() {
-        this.cube = new int[5][5][5];
+
     }
 
     public Cube(int[][][] cube) {
-        this.cube = cube;
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                for (int k = 0; k < 5; k++) {
+                    this.cube[i][j][k] = cube[i][j][k];
+                }
+            }
+        }
     }
 
     public int[][][] getCube() {
@@ -54,7 +60,7 @@ public class Cube {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 if (faceCandidate.getFace()[i][j] != 0) {
-                    setPointToFace(number, i, j, faceCandidate.getFace()[i][j], cube);
+                    setPointToFace(number, i, j, number, cube);
                 }
             }
         }

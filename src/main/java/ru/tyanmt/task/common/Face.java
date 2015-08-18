@@ -32,16 +32,4 @@ public class Face {
     public void setAdjacentFaces(int[][] adjacentFaces) {
         this.adjacentFaces = adjacentFaces;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null) {
-            return false;
-        }
-        if (!(o instanceof Face)) {
-            return false;
-        }
-
-        return Arrays.deepEquals(this.face,((Face) o).face);
-    }
 }
