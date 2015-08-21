@@ -405,6 +405,54 @@ public class TaskSecondTestSuite {
         assertThat faceSix, equalTo(6)
     }
 
+
+
+    @Test
+    public void shouldPrintCube() {
+        //given
+        int[][][] cubeArray = [
+                [[0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 1, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0]],
+
+                [[0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0]],
+
+                [[0, 0, 2, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [4, 0, 0, 0, 6],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 5, 0, 0]],
+
+                [[0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0]],
+
+                [[0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 3, 0, 0],
+                 [0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 0]]
+        ]
+        Cube cube = new Cube(cubeArray)
+        //when
+        int faceOne = getPointFromFace(1,2,2,cube.cube)
+        int faceTwo = getPointFromFace(2,2,2,cube.cube)
+        int faceThree = getPointFromFace(3,2,2,cube.cube)
+        int faceFour = getPointFromFace(4,2,2,cube.cube)
+        int faceFive = getPointFromFace(5,2,2,cube.cube)
+        int faceSix = getPointFromFace(6,2,2,cube.cube)
+        //then
+    }
+
+
     @Test
     public void shouldRotateFace() {
         //given

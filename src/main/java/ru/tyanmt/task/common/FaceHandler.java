@@ -16,11 +16,31 @@ public class FaceHandler {
         return faceMatrix;
     }
 
+    public static int[][] flipFaceHorizontally(Face face) {
+        int[][] faceMatrix = new int[5][5];
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                faceMatrix[i][j] = face.getFace()[i][5-1-j];
+            }
+        }
+        return faceMatrix;
+    }
+
     public static int[][] rotateClockwise(Face faceCandidate) {
         int[][] newFace = new int[5][5];
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 newFace[j][faceCandidate.getFace().length - 1 - i] = faceCandidate.getFace()[i][j];
+            }
+        }
+        return newFace;
+    }
+
+    public static int[][] transposeMatrix(Face faceCandidate) {
+        int[][] newFace = new int[5][5];
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                newFace[i][j] = faceCandidate.getFace()[j][i];
             }
         }
         return newFace;
