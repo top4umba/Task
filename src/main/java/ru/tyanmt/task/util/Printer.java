@@ -6,7 +6,6 @@ import ru.tyanmt.task.common.Face;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.tyanmt.task.common.FaceHandler.flipFace;
 import static ru.tyanmt.task.common.FaceHandler.flipFaceHorizontally;
 import static ru.tyanmt.task.common.FaceHandler.transposeMatrix;
 
@@ -15,7 +14,7 @@ import static ru.tyanmt.task.common.FaceHandler.transposeMatrix;
  */
 public class Printer {
     public static void print(Cube cube) {
-        List<String> asciiCube = new ArrayList<>();
+        List<String> asciiFaces = new ArrayList<>();
         List<Face> faces = new ArrayList<>();
 
         faces.add(new Face(transposeMatrix(cube.getFace(1))));
@@ -25,9 +24,9 @@ public class Printer {
         faces.add(new Face(transposeMatrix(new Face(flipFaceHorizontally(cube.getFace(5))))));
         faces.add(new Face(transposeMatrix(new Face(flipFaceHorizontally(cube.getFace(6))))));
 
-        addFirstThreeFaces(faces, asciiCube);
-        addOtherThreeFaces(faces, asciiCube);
-        printFaces(asciiCube);
+        addFirstThreeFaces(faces, asciiFaces);
+        addOtherThreeFaces(faces, asciiFaces);
+        printFaces(asciiFaces);
     }
 
     private static void printFaces(List<String> asciiCube) {
@@ -41,7 +40,7 @@ public class Printer {
             StringBuilder line = new StringBuilder();
             for (int j = 1; j < 4; j++) {
                 for (int k = 0; k < 5; k++) {
-                    line.append(faces.get(j-1).getFace()[i][k] == j ? "o" : " ");
+                    line.append(faces.get(j-1).getMatrix()[i][k] == j ? "o" : " ");
                 }
             }
             asciiCube.add(line.toString());
@@ -54,7 +53,7 @@ public class Printer {
                 StringBuilder line = new StringBuilder();
                 line.append("     ");
                 for (int k = 0; k < 5; k++) {
-                    line.append(faces.get(i - 1).getFace()[j][k] == i ? "o" : " ");
+                    line.append(faces.get(i - 1).getMatrix()[j][k] == i ? "o" : " ");
                 }
                 asciiCube.add(line.toString());
             }

@@ -19,36 +19,32 @@ public class CubeAssembler {
     List<Cube> solutions = new ArrayList<>();
 
     public void assembleCube(CubeASCII flatCube) {
-        addFace(new Cube(), 1, flatCube.getFaces());
+        Cube cube = new Cube();
+        List<Face> faces = flatCube.getFaces();
+        cube.putFaceOn(1, faces.remove(0));
+        addFaceTo(cube, 2, faces);
     }
 
     public List<Cube> getSolutions() {
         return solutions;
     }
 
-    private void addFace(Cube cube, int faceNumber, List<Face> faces) {
-        if (faces.size()==6){
-            cube.putFaceOn(faceNumber, faces.remove(0));
-            addFace(cube, faceNumber+1,faces);
-        }else{
-            for (Face face : faces) {
-                Cube cubeCandidate = new Cube(cube.getCube());
-                final List<Face> remainingFaces = new ArrayList<>(faces);
-                remainingFaces.remove(face);
-                List<Face> rotateOptions = getRotateOptions(face);
-                for (Face faceOption : rotateOptions) {
-                    if (cubeCandidate.putFaceOn(faceNumber, faceOption)) {
-                        if (remainingFaces.isEmpty()) {
-                            solutions.add(cubeCandidate);
-                        } else {
-                            addFace(cubeCandidate, faceNumber + 1, remainingFaces);
-                        }
+    private void addFaceTo(Cube cube, int faceNumber, List<Face> faces) {
+        for (Face face : faces) {
+            Cube cubeCandidate = new Cube(cube.getCube());
+            final List<Face> remainingFaces = new ArrayList<>(faces);
+            remainingFaces.remove(face);
+            List<Face> rotateOptions = getRotateOptions(face);
+            for (Face faceOption : rotateOptions) {
+                if (cubeCandidate.putFaceOn(faceNumber, faceOption)) {
+                    if (remainingFaces.isEmpty()) {
+                        solutions.add(cubeCandidate);
+                    } else {
+                        addFaceTo(cubeCandidate, faceNumber + 1, remainingFaces);
                     }
                 }
             }
         }
-
     }
-
 
 }

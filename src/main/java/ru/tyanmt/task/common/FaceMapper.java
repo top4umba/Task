@@ -25,6 +25,22 @@ public class FaceMapper {
         }
     }
 
+    public static int getPointFromSection(int number, int i, int j, int[][][] cube) {
+        switch (number) {
+            case 1:
+            case 3:
+                return cube[2][i][j];
+            case 2:
+            case 5:
+                return cube[i][2][j];
+            case 4:
+            case 6:
+                return cube[i][j][2];
+            default:
+                throw new IllegalArgumentException("Side number should be between 1 and 6");
+        }
+    }
+
     public static void setPointToFace(int number, int i, int j, int value, int[][][] cube) {
         switch (number) {
             case 1:

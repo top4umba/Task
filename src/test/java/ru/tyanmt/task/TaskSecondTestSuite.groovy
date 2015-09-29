@@ -1,4 +1,3 @@
-import org.junit.Ignore
 import org.junit.Test
 import ru.tyanmt.task.common.Cube
 import ru.tyanmt.task.common.CubeASCII
@@ -29,7 +28,7 @@ public class TaskSecondTestSuite {
         //when
         Face face = cube.getFace(2);
         //then
-        assertThat Arrays.deepEquals(face.face, controlFace), is(true)
+        assertThat Arrays.deepEquals(face.matrix, controlFace), is(true)
     }
 
     @Test
@@ -46,7 +45,7 @@ public class TaskSecondTestSuite {
         //when
         Face face = cube.getFace(5);
         //then
-        assertThat Arrays.deepEquals(face.face, controlFace), is(true)
+        assertThat Arrays.deepEquals(face.matrix, controlFace), is(true)
     }
 
     @Test
@@ -68,11 +67,13 @@ public class TaskSecondTestSuite {
         ]
         Face cubeFace = new Face(faceCubeMatrix);
         int[][] adjacentEdges = [
-                [0, 5, 0],
-                [2, 0, 4],
-                [0, 3, 0]
+                [0, 5, 5, 5, 0],
+                [2, 0, 0, 0, 4],
+                [2, 0, 0, 0, 4],
+                [2, 0, 0, 0, 4],
+                [0, 3, 3, 3, 0],
         ]
-        cubeFace.setAdjacentFaces(adjacentEdges);
+        cubeFace.setAdjacentFacesSection(adjacentEdges);
         //when
         boolean canBePlaced = isAppropriateFace(new Face(faceCandidateMatrix), cubeFace);
         //then
@@ -83,11 +84,11 @@ public class TaskSecondTestSuite {
     public void shouldConnectMatricesWhenOnlyVertexIsNotFilledAndAdjacentFaceIsEmpty() {
         //given
         int[][] faceCandidateMatrix = [
-                [0, 1, 0, 1, 0],
-                [1, 1, 1, 1, 1],
+                [0, 0, 0, 0, 0],
+                [1, 1, 1, 1, 0],
                 [0, 1, 1, 1, 0],
-                [1, 1, 1, 1, 1],
-                [1, 0, 1, 0, 0],
+                [1, 1, 1, 1, 0],
+                [1, 0, 0, 0, 0],
         ]
         int[][] faceCubeMatrix = [
                 [0, 0, 0, 0, 0],
@@ -98,11 +99,13 @@ public class TaskSecondTestSuite {
         ]
         Face cubeFace = new Face(faceCubeMatrix);
         int[][] adjacentEdges = [
-                [0, 0, 0],
-                [2, 0, 0],
-                [0, 0, 0]
+                [0, 0, 0, 0, 0],
+                [2, 0, 0, 0, 0],
+                [2, 0, 0, 0, 0],
+                [2, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
         ]
-        cubeFace.setAdjacentFaces(adjacentEdges);
+        cubeFace.setAdjacentFacesSection(adjacentEdges);
         //when
         boolean canBePlaced = isAppropriateFace(new Face(faceCandidateMatrix), cubeFace);
         //then
@@ -127,12 +130,14 @@ public class TaskSecondTestSuite {
                 [0, 0, 0, 0, 0],
         ]
         Face cubeFace = new Face(faceCubeMatrix);
-        int[][] adjacentEdges = [
-                [0, 2, 0],
-                [0, 0, 0],
-                [0, 0, 0]
+        int[][] adjacentFaces = [
+                [0, 2, 2, 2, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
         ]
-        cubeFace.setAdjacentFaces(adjacentEdges);
+        cubeFace.setAdjacentFacesSection(adjacentFaces);
         //when
         boolean canBePlaced = isAppropriateFace(new Face(faceCandidateMatrix), cubeFace);
         //then
@@ -151,18 +156,20 @@ public class TaskSecondTestSuite {
         ]
         int[][] faceCubeMatrix = [
                 [2, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0],
+                [2, 0, 0, 0, 0],
+                [2, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0],
         ]
         Face cubeFace = new Face(faceCubeMatrix);
         int[][] adjacentEdges = [
-                [0, 0, 0],
-                [2, 0, 0],
-                [0, 0, 0]
+                [0, 0, 0, 0, 0],
+                [2, 0, 0, 0, 0],
+                [2, 0, 0, 0, 0],
+                [2, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
         ]
-        cubeFace.setAdjacentFaces(adjacentEdges);
+        cubeFace.setAdjacentFacesSection(adjacentEdges);
         //when
         boolean canBePlaced = isAppropriateFace(new Face(faceCandidateMatrix), cubeFace);
         //then
@@ -259,9 +266,11 @@ public class TaskSecondTestSuite {
                 [0, 0, 0, 0, 0]
         ]
         int[][] adjacentFaces = [
-                [0, 2, 0],
-                [1, 0, 3],
-                [0, 0, 0]
+                [0, 2, 2, 2, 0],
+                [1, 0, 0, 0, 3],
+                [1, 0, 0, 0, 3],
+                [1, 0, 0, 0, 3],
+                [0, 0, 0, 0, 0]
         ]
         int[][][] cube = [
                 [[0, 2, 0, 2, 0],
@@ -292,8 +301,8 @@ public class TaskSecondTestSuite {
         //when
         Face face = new Cube(cube).getFace(3);
         //then
-        assertThat Arrays.deepEquals(face.face, topFace), is(true)
-        assertThat Arrays.deepEquals(face.adjacentFaces, adjacentFaces), is(true)
+        assertThat Arrays.deepEquals(face.matrix, topFace), is(true)
+        assertThat Arrays.deepEquals(face.adjacentFacesSection, adjacentFaces), is(true)
     }
 
     @Test
@@ -350,7 +359,7 @@ public class TaskSecondTestSuite {
         cube.putFaceOn(3, new Face(face))
         Face topFace = cube.getFace(3)
         //then
-        assertThat Arrays.deepEquals(controlFace, topFace.face), is(true)
+        assertThat Arrays.deepEquals(controlFace, topFace.matrix), is(true)
     }
 
 
@@ -450,6 +459,7 @@ public class TaskSecondTestSuite {
         int faceFive = getPointFromFace(5,2,2,cube.cube)
         int faceSix = getPointFromFace(6,2,2,cube.cube)
         //then
+        //TODO Pring cube
     }
 
 
@@ -527,7 +537,7 @@ public class TaskSecondTestSuite {
         List<Face> options = getRotateOptions(new Face(face));
         //then
         options.eachWithIndex {opt, i ->
-            assertThat Arrays.deepEquals(opt.face, faces[i]), is(true)
+            assertThat Arrays.deepEquals(opt.matrix, faces[i]), is(true)
         }
     }
 
@@ -540,6 +550,7 @@ public class TaskSecondTestSuite {
         assembler.assembleCube(blueCube);
         //then
         println assembler.solutions.size()
+
         if (!assembler.solutions.empty) {
             assembler.solutions.each {
                 println ""

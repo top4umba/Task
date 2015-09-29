@@ -1,35 +1,33 @@
 package ru.tyanmt.task.common;
 
-import java.util.Arrays;
-
 /**
  * Created by mityan on 10.08.2015.
  */
 public class Face {
-    private int[][] face;
-    private int[][] adjacentFaces = new int[3][3];
+    private int[][] matrix;
+    private int[][] adjacentFacesSection = new int[5][5];
 
     public Face() {
-        this.face = new int[5][5];
+        this.matrix = new int[5][5];
     }
 
     public Face(int[][] face) {
-        this.face = face;
+        this.matrix = face;
     }
 
-    public int[][] getFace() {
-        return face;
+    public int[][] getMatrix() {
+        return matrix;
     }
 
-    public void setFace(int[][] face) {
-        this.face = face;
+    public void setMatrix(int[][] matrix) {
+        this.matrix = matrix;
     }
 
-    public int[][] getAdjacentFaces() {
-        return adjacentFaces;
+    public int[][] getAdjacentFacesSection() {
+        return adjacentFacesSection;
     }
 
-    public void setAdjacentFaces(int[][] adjacentFaces) {
-        this.adjacentFaces = adjacentFaces;
+    public void setAdjacentFacesSection(int[][] adjacentFacesSection) {
+        this.adjacentFacesSection = adjacentFacesSection;
     }
 }
