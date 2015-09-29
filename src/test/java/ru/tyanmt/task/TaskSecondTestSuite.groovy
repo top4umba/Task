@@ -2,14 +2,16 @@ import org.junit.Test
 import ru.tyanmt.task.common.Cube
 import ru.tyanmt.task.common.CubeASCII
 import ru.tyanmt.task.common.Face
+import ru.tyanmt.task.common.MatrixUtil
 import ru.tyanmt.task.solution.CubeAssembler
 import ru.tyanmt.task.util.Printer
 
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.is
 import static org.junit.Assert.assertThat
-import static ru.tyanmt.task.common.FaceHandler.*
 import static ru.tyanmt.task.common.FaceMapper.getPointFromFace
+import static ru.tyanmt.task.common.FaceMergeValidator.isAppropriateFace
+import static ru.tyanmt.task.common.FaceMergeValidator.isVerticesAccessible
 
 public class TaskSecondTestSuite {
 
@@ -65,7 +67,7 @@ public class TaskSecondTestSuite {
                 [0, 0, 0, 0, 0],
                 [0, 3, 0, 3, 3],
         ]
-        Face cubeFace = new Face(faceCubeMatrix);
+
         int[][] adjacentEdges = [
                 [0, 5, 5, 5, 0],
                 [2, 0, 0, 0, 4],
@@ -73,7 +75,7 @@ public class TaskSecondTestSuite {
                 [2, 0, 0, 0, 4],
                 [0, 3, 3, 3, 0],
         ]
-        cubeFace.setAdjacentFacesSection(adjacentEdges);
+        Face cubeFace = new Face(faceCubeMatrix,adjacentEdges);
         //when
         boolean canBePlaced = isAppropriateFace(new Face(faceCandidateMatrix), cubeFace);
         //then
@@ -97,7 +99,7 @@ public class TaskSecondTestSuite {
                 [0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0],
         ]
-        Face cubeFace = new Face(faceCubeMatrix);
+
         int[][] adjacentEdges = [
                 [0, 0, 0, 0, 0],
                 [2, 0, 0, 0, 0],
@@ -105,7 +107,7 @@ public class TaskSecondTestSuite {
                 [2, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0],
         ]
-        cubeFace.setAdjacentFacesSection(adjacentEdges);
+        Face cubeFace = new Face(faceCubeMatrix,adjacentEdges);
         //when
         boolean canBePlaced = isAppropriateFace(new Face(faceCandidateMatrix), cubeFace);
         //then
@@ -129,7 +131,6 @@ public class TaskSecondTestSuite {
                 [0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0],
         ]
-        Face cubeFace = new Face(faceCubeMatrix);
         int[][] adjacentFaces = [
                 [0, 2, 2, 2, 0],
                 [0, 0, 0, 0, 0],
@@ -137,7 +138,7 @@ public class TaskSecondTestSuite {
                 [0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0],
         ]
-        cubeFace.setAdjacentFacesSection(adjacentFaces);
+        Face cubeFace = new Face(faceCubeMatrix,adjacentFaces);
         //when
         boolean canBePlaced = isAppropriateFace(new Face(faceCandidateMatrix), cubeFace);
         //then
@@ -161,7 +162,6 @@ public class TaskSecondTestSuite {
                 [0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0],
         ]
-        Face cubeFace = new Face(faceCubeMatrix);
         int[][] adjacentEdges = [
                 [0, 0, 0, 0, 0],
                 [2, 0, 0, 0, 0],
@@ -169,7 +169,7 @@ public class TaskSecondTestSuite {
                 [2, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0],
         ]
-        cubeFace.setAdjacentFacesSection(adjacentEdges);
+        Face cubeFace = new Face(faceCubeMatrix,adjacentEdges);
         //when
         boolean canBePlaced = isAppropriateFace(new Face(faceCandidateMatrix), cubeFace);
         //then
@@ -194,7 +194,7 @@ public class TaskSecondTestSuite {
                 [0, 1, 0, 1, 0]
         ]
         //when
-        int[][] flippedFace = flipFace(new Face(face));
+        int[][] flippedFace = MatrixUtil.flipMatrix(face);
         //then
         assertThat Arrays.deepEquals(controlFace, flippedFace), is(true)
     }
@@ -217,7 +217,7 @@ public class TaskSecondTestSuite {
                 [0, 0, 1, 1, 0]
         ]
         //when
-        int[][] rotatedFace = rotateClockwise(new Face(face));
+        int[][] rotatedFace = MatrixUtil.rotateMatrixClockwise(face);
         //then
         assertThat Arrays.deepEquals(controlFace, rotatedFace), is(true)
     }
@@ -534,7 +534,7 @@ public class TaskSecondTestSuite {
         ]
 
         //when
-        List<Face> options = getRotateOptions(new Face(face));
+        List<Face> options = CubeAssembler.getRotateOptions(new Face(face));
         //then
         options.eachWithIndex {opt, i ->
             assertThat Arrays.deepEquals(opt.matrix, faces[i]), is(true)

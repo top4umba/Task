@@ -2,10 +2,8 @@ package ru.tyanmt.task.common;
 
 import java.util.Arrays;
 
-import static ru.tyanmt.task.common.FaceHandler.*;
-import static ru.tyanmt.task.common.FaceMapper.getPointFromSection;
-import static ru.tyanmt.task.common.FaceMapper.getPointFromFace;
-import static ru.tyanmt.task.common.FaceMapper.setPointToFace;
+import static ru.tyanmt.task.common.FaceMapper.*;
+import static ru.tyanmt.task.common.FaceMergeValidator.*;
 
 /**
  * Created by mityan on 07.08.2015.
@@ -13,8 +11,8 @@ import static ru.tyanmt.task.common.FaceMapper.setPointToFace;
 public class Cube {
 
     public static final int FACE_LENGTH = 5;
-
-    int[][][] cube = new int[FACE_LENGTH][FACE_LENGTH][FACE_LENGTH];
+    //TODO Make cube private
+    private final int[][][] cube = new int[FACE_LENGTH][FACE_LENGTH][FACE_LENGTH];
 
     public Cube() {
     }
@@ -24,6 +22,16 @@ public class Cube {
             for (int j = 0; j < FACE_LENGTH; j++) {
                 for (int k = 0; k < FACE_LENGTH; k++) {
                     this.cube[i][j][k] = cube[i][j][k];
+                }
+            }
+        }
+    }
+
+    public Cube(Cube cube) {
+        for (int i = 0; i < FACE_LENGTH; i++) {
+            for (int j = 0; j < FACE_LENGTH; j++) {
+                for (int k = 0; k < FACE_LENGTH; k++) {
+                    this.cube[i][j][k] = cube.cube[i][j][k];
                 }
             }
         }

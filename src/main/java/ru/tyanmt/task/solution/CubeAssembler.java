@@ -7,7 +7,8 @@ import ru.tyanmt.task.common.Face;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.tyanmt.task.common.FaceHandler.getRotateOptions;
+import static ru.tyanmt.task.common.MatrixUtil.flipMatrix;
+import static ru.tyanmt.task.common.MatrixUtil.rotateMatrixClockwise;
 
 
 /**
@@ -31,7 +32,7 @@ public class CubeAssembler {
 
     private void addFaceTo(Cube cube, int faceNumber, List<Face> faces) {
         for (Face face : faces) {
-            Cube cubeCandidate = new Cube(cube.getCube());
+            Cube cubeCandidate = new Cube(cube);
             final List<Face> remainingFaces = new ArrayList<>(faces);
             remainingFaces.remove(face);
             List<Face> rotateOptions = getRotateOptions(face);
@@ -45,6 +46,17 @@ public class CubeAssembler {
                 }
             }
         }
+    }
+
+    private static List<Face> getRotateOptions(Face face) {
+        int[][] faceOption = face.getMatrix();
+        List<Face> result = new ArrayList<>();
+        result.add(face);
+        for (int i = 0; i < 7; i++) {
+            faceOption = i == 3 ? flipMatrix(faceOption) : rotateMatrixClockwise(faceOption);
+            result.add(new Face(faceOption));
+        }
+        return result;
     }
 
 }

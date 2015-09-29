@@ -1,33 +1,33 @@
 package ru.tyanmt.task.common;
 
+import static ru.tyanmt.task.common.Cube.FACE_LENGTH;
+
 /**
  * Created by mityan on 10.08.2015.
  */
 public class Face {
-    private int[][] matrix;
-    private int[][] adjacentFacesSection = new int[5][5];
+    //TODO Make matrices immutable
+    private final int[][] matrix;
+    private final int[][] adjacentFacesSection;
 
     public Face() {
-        this.matrix = new int[5][5];
+        this(new int[FACE_LENGTH][FACE_LENGTH]);
     }
 
     public Face(int[][] face) {
+        this(face,new int[FACE_LENGTH][FACE_LENGTH]);
+    }
+
+    public Face(int[][] face, int[][] adjacentFacesSection) {
         this.matrix = face;
+        this.adjacentFacesSection = adjacentFacesSection;
     }
 
     public int[][] getMatrix() {
         return matrix;
     }
 
-    public void setMatrix(int[][] matrix) {
-        this.matrix = matrix;
-    }
-
     public int[][] getAdjacentFacesSection() {
         return adjacentFacesSection;
-    }
-
-    public void setAdjacentFacesSection(int[][] adjacentFacesSection) {
-        this.adjacentFacesSection = adjacentFacesSection;
     }
 }
