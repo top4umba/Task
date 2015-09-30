@@ -3,6 +3,7 @@ package ru.tyanmt.task.solution;
 import ru.tyanmt.task.common.Cube;
 import ru.tyanmt.task.common.CubeASCII;
 import ru.tyanmt.task.common.Face;
+import ru.tyanmt.task.common.FacePosition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,26 +23,26 @@ public class CubeAssembler {
     public void assembleCube(CubeASCII flatCube) {
         Cube cube = new Cube();
         List<Face> faces = flatCube.getFaces();
-        cube.putFaceOn(1, faces.remove(0));
-        addFaceTo(cube, 2, faces);
+        cube.putFaceOn(FacePosition.BOTTOM, faces.remove(0));
+        addFaceTo(cube, FacePosition.FRONT, faces);
     }
 
     public List<Cube> getSolutions() {
         return solutions;
     }
 
-    private void addFaceTo(Cube cube, int faceNumber, List<Face> faces) {
+    private void addFaceTo(Cube cube, FacePosition facePosition, List<Face> faces) {
         for (Face face : faces) {
             Cube cubeCandidate = new Cube(cube);
             final List<Face> remainingFaces = new ArrayList<>(faces);
             remainingFaces.remove(face);
             List<Face> rotateOptions = getRotateOptions(face);
             for (Face faceOption : rotateOptions) {
-                if (cubeCandidate.putFaceOn(faceNumber, faceOption)) {
+                if (cubeCandidate.putFaceOn(facePosition, faceOption)) {
                     if (remainingFaces.isEmpty()) {
                         solutions.add(cubeCandidate);
                     } else {
-                        addFaceTo(cubeCandidate, faceNumber + 1, remainingFaces);
+                        addFaceTo(cubeCandidate, facePosition.next(), remainingFaces);
                     }
                 }
             }

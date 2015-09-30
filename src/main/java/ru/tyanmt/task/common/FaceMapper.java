@@ -8,60 +8,61 @@ import static ru.tyanmt.task.common.Cube.FACE_LENGTH;
 public class FaceMapper {
 
 
-    public static int getPointFromFace(int number, int i, int j, int[][][] cube) {
-        switch (number) {
-            case 1:
+    public static int getPointFromFace(FacePosition position, int i, int j, int[][][] cube) {
+        switch (position) {
+            case BOTTOM:
                 return cube[0][i][j];
-            case 2:
+            case FRONT:
                 return cube[i][0][j];
-            case 3:
-                return cube[FACE_LENGTH-1][i][j];
-            case 4:
-                return cube[i][j][FACE_LENGTH-1];
-            case 5:
-                return cube[i][FACE_LENGTH-1][j];
-            case 6:
+            case TOP:
+                return cube[FACE_LENGTH - 1][i][j];
+            case RIGHT:
+                return cube[i][j][FACE_LENGTH - 1];
+            case REAR:
+                return cube[i][FACE_LENGTH - 1][j];
+            case LEFT:
                 return cube[i][j][0];
             default:
                 throw new IllegalArgumentException("Side number should be between 1 and 6");
         }
     }
 
-    public static int getPointFromSection(int number, int i, int j, int[][][] cube) {
-        switch (number) {
-            case 1:
-            case 3:
-                return cube[FACE_LENGTH/2][i][j];
-            case 2:
-            case 5:
-                return cube[i][FACE_LENGTH/2][j];
-            case 4:
-            case 6:
-                return cube[i][j][FACE_LENGTH/2];
+    public static int getPointFromSection(FacePosition position, int i, int j, int[][][] cube) {
+        switch (position) {
+            case BOTTOM:
+            case TOP:
+                return cube[FACE_LENGTH / 2][i][j];
+            case FRONT:
+            case REAR:
+                return cube[i][FACE_LENGTH / 2][j];
+            case LEFT:
+            case RIGHT:
+                return cube[i][j][FACE_LENGTH / 2];
             default:
                 throw new IllegalArgumentException("Side number should be between 1 and 6");
         }
     }
 
-    public static void setPointToFace(int number, int i, int j, int value, int[][][] cube) {
-        switch (number) {
-            case 1:
-                cube[0][i][j] = value;
+    public static void setPointToFace(FacePosition position, int i, int j, int[][][] cube) {
+        int faceNumber = position.ordinal()+1;
+        switch (position) {
+            case BOTTOM:
+                cube[0][i][j] = faceNumber;
                 break;
-            case 2:
-                cube[i][0][j] = value;
+            case FRONT:
+                cube[i][0][j] = faceNumber;
                 break;
-            case 3:
-                cube[FACE_LENGTH-1][i][j] = value;
+            case TOP:
+                cube[FACE_LENGTH - 1][i][j] = faceNumber;
                 break;
-            case 4:
-                cube[i][j][FACE_LENGTH-1] = value;
+            case RIGHT:
+                cube[i][j][FACE_LENGTH - 1] = faceNumber;
                 break;
-            case 5:
-                cube[i][FACE_LENGTH-1][j] = value;
+            case REAR:
+                cube[i][FACE_LENGTH - 1][j] = faceNumber;
                 break;
-            case 6:
-                cube[i][j][0] = value;
+            case LEFT:
+                cube[i][j][0] = faceNumber;
                 break;
             default:
                 throw new IllegalArgumentException("Side number should be between 1 and 6");

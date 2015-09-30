@@ -15,7 +15,7 @@ public class Face {
     }
 
     public Face(int[][] face) {
-        this(face,new int[FACE_LENGTH][FACE_LENGTH]);
+        this(face, new int[FACE_LENGTH][FACE_LENGTH]);
     }
 
     public Face(int[][] face, int[][] adjacentFacesSection) {

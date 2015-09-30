@@ -47,31 +47,31 @@ public class Cube {
         return result;
     }
 
-    public Face getFace(int number) {
+    public Face getFace(FacePosition position) {
         Face face = new Face();
         for (int i = 0; i < FACE_LENGTH; i++) {
             for (int j = 0; j < FACE_LENGTH; j++) {
-                face.getMatrix()[i][j] = getPointFromFace(number, i, j, cube);
-                if (isEdge(i, j) && !isVertex(i,j)) {
-                    face.getAdjacentFacesSection()[i][j] = getPointFromSection(number, i, j, cube);
+                face.getMatrix()[i][j] = getPointFromFace(position, i, j, cube);
+                if (isEdge(i, j) && !isVertex(i, j)) {
+                    face.getAdjacentFacesSection()[i][j] = getPointFromSection(position, i, j, cube);
                 }
             }
         }
         return face;
     }
 
-    public boolean putFaceOn(int number, Face faceCandidate) {
-        Face cubeFace = this.getFace(number);
+    public boolean putFaceOn(FacePosition position, Face faceCandidate) {
+        Face cubeFace = this.getFace(position);
         if (!isAppropriateFace(faceCandidate, cubeFace)) return false;
-        addFaceOnSide(number, faceCandidate);
+        addFaceOnSide(position, faceCandidate);
         return true;
     }
 
-    private void addFaceOnSide(int number, Face faceCandidate) {
+    private void addFaceOnSide(FacePosition position, Face faceCandidate) {
         for (int i = 0; i < FACE_LENGTH; i++) {
             for (int j = 0; j < FACE_LENGTH; j++) {
                 if (faceCandidate.getMatrix()[i][j] != 0) {
-                    setPointToFace(number, i, j, number, cube);
+                    setPointToFace(position, i, j, cube);
                 }
             }
         }

@@ -1,9 +1,7 @@
 package ru.tyanmt.task;
 
-import ru.tyanmt.task.common.Cube;
 import ru.tyanmt.task.common.CubeASCII;
 import ru.tyanmt.task.solution.CubeAssembler;
-import ru.tyanmt.task.util.Printer;
 
 /**
  * Created by mityan on 31.07.2015.

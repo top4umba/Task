@@ -2,6 +2,7 @@ package ru.tyanmt.task.common;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import static ru.tyanmt.task.common.Cube.FACE_LENGTH;
 
 /**

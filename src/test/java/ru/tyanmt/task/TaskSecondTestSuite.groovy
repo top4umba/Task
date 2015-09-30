@@ -12,6 +12,7 @@ import static org.junit.Assert.assertThat
 import static ru.tyanmt.task.common.FaceMapper.getPointFromFace
 import static ru.tyanmt.task.common.FaceMergeValidator.isAppropriateFace
 import static ru.tyanmt.task.common.FaceMergeValidator.isVerticesAccessible
+import static ru.tyanmt.task.common.FacePosition.*
 
 public class TaskSecondTestSuite {
 
@@ -299,7 +300,7 @@ public class TaskSecondTestSuite {
                 topFace
         ]
         //when
-        Face face = new Cube(cube).getFace(3);
+        Face face = new Cube(cube).getFace(TOP);
         //then
         assertThat Arrays.deepEquals(face.matrix, topFace), is(true)
         assertThat Arrays.deepEquals(face.adjacentFacesSection, adjacentFaces), is(true)
@@ -356,8 +357,8 @@ public class TaskSecondTestSuite {
         ]
         Cube cube = new Cube(cubeArray)
         //when
-        cube.putFaceOn(3, new Face(face))
-        Face topFace = cube.getFace(3)
+        cube.putFaceOn(TOP, new Face(face))
+        Face topFace = cube.getFace(TOP)
         //then
         assertThat Arrays.deepEquals(controlFace, topFace.matrix), is(true)
     }
@@ -399,12 +400,12 @@ public class TaskSecondTestSuite {
         ]
         Cube cube = new Cube(cubeArray)
         //when
-        int faceOne = getPointFromFace(1,2,2,cube.cube)
-        int faceTwo = getPointFromFace(2,2,2,cube.cube)
-        int faceThree = getPointFromFace(3,2,2,cube.cube)
-        int faceFour = getPointFromFace(4,2,2,cube.cube)
-        int faceFive = getPointFromFace(5,2,2,cube.cube)
-        int faceSix = getPointFromFace(6,2,2,cube.cube)
+        int faceOne = getPointFromFace(BOTTOM,2,2,cube.cube)
+        int faceTwo = getPointFromFace(FRONT,2,2,cube.cube)
+        int faceThree = getPointFromFace(TOP,2,2,cube.cube)
+        int faceFour = getPointFromFace(RIGHT,2,2,cube.cube)
+        int faceFive = getPointFromFace(REAR,2,2,cube.cube)
+        int faceSix = getPointFromFace(LEFT,2,2,cube.cube)
         //then
         assertThat faceOne, equalTo(1)
         assertThat faceTwo, equalTo(2)
@@ -452,14 +453,14 @@ public class TaskSecondTestSuite {
         ]
         Cube cube = new Cube(cubeArray)
         //when
-        int faceOne = getPointFromFace(1,2,2,cube.cube)
-        int faceTwo = getPointFromFace(2,2,2,cube.cube)
-        int faceThree = getPointFromFace(3,2,2,cube.cube)
-        int faceFour = getPointFromFace(4,2,2,cube.cube)
-        int faceFive = getPointFromFace(5,2,2,cube.cube)
-        int faceSix = getPointFromFace(6,2,2,cube.cube)
+        int faceOne = getPointFromFace(BOTTOM,2,2,cube.cube)
+        int faceTwo = getPointFromFace(FRONT,2,2,cube.cube)
+        int faceThree = getPointFromFace(TOP,2,2,cube.cube)
+        int faceFour = getPointFromFace(RIGHT,2,2,cube.cube)
+        int faceFive = getPointFromFace(REAR,2,2,cube.cube)
+        int faceSix = getPointFromFace(LEFT,2,2,cube.cube)
         //then
-        //TODO Pring cube
+        //TODO Print cube
     }
 
 
