@@ -11,49 +11,27 @@ import static ru.tyanmt.task.common.FaceMergeValidator.*;
 public class Cube {
 
     public static final int FACE_LENGTH = 5;
-    //TODO Make cube private
     private final int[][][] cube = new int[FACE_LENGTH][FACE_LENGTH][FACE_LENGTH];
 
     public Cube() {
-    }
 
-    public Cube(int[][][] cube) {
-        for (int i = 0; i < FACE_LENGTH; i++) {
-            for (int j = 0; j < FACE_LENGTH; j++) {
-                for (int k = 0; k < FACE_LENGTH; k++) {
-                    this.cube[i][j][k] = cube[i][j][k];
-                }
-            }
-        }
     }
 
     public Cube(Cube cube) {
-        for (int i = 0; i < FACE_LENGTH; i++) {
-            for (int j = 0; j < FACE_LENGTH; j++) {
-                for (int k = 0; k < FACE_LENGTH; k++) {
-                    this.cube[i][j][k] = cube.cube[i][j][k];
-                }
+        for (int x = 0; x < FACE_LENGTH; x++) {
+            for (int y = 0; y < FACE_LENGTH; y++) {
+                this.cube[x][y] = Arrays.copyOf(cube.cube[x][y], FACE_LENGTH);
             }
         }
-    }
-
-    public int[][][] getCube() {
-        int[][][] result = new int[FACE_LENGTH][FACE_LENGTH][FACE_LENGTH];
-        for (int i = 0; i < FACE_LENGTH; i++) {
-            for (int j = 0; j < FACE_LENGTH; j++) {
-                result[i][j] = Arrays.copyOf(cube[i][j], FACE_LENGTH);
-            }
-        }
-        return result;
     }
 
     public Face getFace(FacePosition position) {
         Face face = new Face();
-        for (int i = 0; i < FACE_LENGTH; i++) {
-            for (int j = 0; j < FACE_LENGTH; j++) {
-                face.getMatrix()[i][j] = getPointFromFace(position, i, j, cube);
-                if (isEdge(i, j) && !isVertex(i, j)) {
-                    face.getAdjacentFacesSection()[i][j] = getPointFromSection(position, i, j, cube);
+        for (int x = 0; x < FACE_LENGTH; x++) {
+            for (int y = 0; y < FACE_LENGTH; y++) {
+                face.setPoint(x, y, getPointFromFace(position, x, y, cube));
+                if (isEdge(x, y) && !isVertex(x, y)) {
+                    face.setNeighborAt(x, y, getPointFromSection(position, x, y, cube));
                 }
             }
         }
@@ -68,10 +46,10 @@ public class Cube {
     }
 
     private void addFaceOnSide(FacePosition position, Face faceCandidate) {
-        for (int i = 0; i < FACE_LENGTH; i++) {
-            for (int j = 0; j < FACE_LENGTH; j++) {
-                if (faceCandidate.getMatrix()[i][j] != 0) {
-                    setPointToFace(position, i, j, cube);
+        for (int x = 0; x < FACE_LENGTH; x++) {
+            for (int y = 0; y < FACE_LENGTH; y++) {
+                if (faceCandidate.getPoint(x, y) != 0) {
+                    setPointToFace(position, x, y, cube);
                 }
             }
         }

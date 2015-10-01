@@ -8,17 +8,16 @@ import ru.tyanmt.task.common.FacePosition;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.tyanmt.task.common.MatrixUtil.flipMatrix;
-import static ru.tyanmt.task.common.MatrixUtil.rotateMatrixClockwise;
-
 
 /**
  * Created by mityan on 03.08.2015.
  */
 public class CubeAssembler {
-
-
     List<Cube> solutions = new ArrayList<>();
+
+    public List<Cube> getSolutions() {
+        return solutions;
+    }
 
     public void assembleCube(CubeASCII flatCube) {
         Cube cube = new Cube();
@@ -27,37 +26,21 @@ public class CubeAssembler {
         addFaceTo(cube, FacePosition.FRONT, faces);
     }
 
-    public List<Cube> getSolutions() {
-        return solutions;
-    }
-
     private void addFaceTo(Cube cube, FacePosition facePosition, List<Face> faces) {
-        for (Face face : faces) {
+        faces.stream().forEach(face -> {
             Cube cubeCandidate = new Cube(cube);
             final List<Face> remainingFaces = new ArrayList<>(faces);
             remainingFaces.remove(face);
-            List<Face> rotateOptions = getRotateOptions(face);
-            for (Face faceOption : rotateOptions) {
-                if (cubeCandidate.putFaceOn(facePosition, faceOption)) {
-                    if (remainingFaces.isEmpty()) {
-                        solutions.add(cubeCandidate);
-                    } else {
-                        addFaceTo(cubeCandidate, facePosition.next(), remainingFaces);
-                    }
-                }
-            }
-        }
-    }
-
-    private static List<Face> getRotateOptions(Face face) {
-        int[][] faceOption = face.getMatrix();
-        List<Face> result = new ArrayList<>();
-        result.add(face);
-        for (int i = 0; i < 7; i++) {
-            faceOption = i == 3 ? flipMatrix(faceOption) : rotateMatrixClockwise(faceOption);
-            result.add(new Face(faceOption));
-        }
-        return result;
+            face.getRotateOptions().stream()
+                    .filter(faceOption -> cubeCandidate.putFaceOn(facePosition, faceOption))
+                    .forEach(faceOption -> {
+                        if (facePosition.hasNext()) {
+                            addFaceTo(cubeCandidate, facePosition.next(), remainingFaces);
+                        } else {
+                            solutions.add(cubeCandidate);
+                        }
+                    });
+        });
     }
 
 }

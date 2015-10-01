@@ -2,6 +2,8 @@ package ru.tyanmt.task.common;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static ru.tyanmt.task.common.Cube.FACE_LENGTH;
 
@@ -11,7 +13,7 @@ import static ru.tyanmt.task.common.Cube.FACE_LENGTH;
 public class CubeASCII {
     private static final int FACES_IN_ROW = 3;
 
-    private String text =
+    private final String TEXT =
                     "  o  o o o  o  " +
                     " ooo ooooo oooo" +
                     "ooooo ooo oooo " +
@@ -23,23 +25,25 @@ public class CubeASCII {
                     "oooo ooooo oooo" +
                     "oo o o o  oo oo";
 
-    public Face getFace(int faceNumber) {
+    public List<Face> getFaces() {
+        return IntStream.rangeClosed(1,6).mapToObj(i -> getFace(i)).collect(Collectors.toList());
+    }
 
+    public Face getFace(int faceNumber) {
         if (faceNumber < 1 || faceNumber > 6) {
             throw new IllegalArgumentException("Number of face should be in range 1 to 6");
         }
         int startPosition = faceNumber <= FACES_IN_ROW ? getPositionInFirstRow(faceNumber) : getPositionInSecondRow(faceNumber);
-        Face face = readFaceAt(startPosition, faceNumber);
-        return face;
+        return readFaceAt(startPosition, faceNumber);
     }
 
     private Face readFaceAt(int position, int faceNumber) {
         Face face = new Face();
         int rowNumber = 0;
-        while (position < text.length() && rowNumber < FACE_LENGTH) {
-            String row = text.substring(position, position + FACE_LENGTH);
+        while (position < TEXT.length() && rowNumber < FACE_LENGTH) {
+            String row = TEXT.substring(position, position + FACE_LENGTH);
             for (int i = 0; i < row.length(); i++) {
-                face.getMatrix()[rowNumber][i] = row.charAt(i) == 'o' ? faceNumber : 0;
+                face.setPoint(rowNumber, i, row.charAt(i) == 'o' ? faceNumber : 0);
             }
             rowNumber++;
             position += FACES_IN_ROW * FACE_LENGTH;
@@ -53,15 +57,6 @@ public class CubeASCII {
 
     private int getPositionInSecondRow(int faceNumber) {
         return FACE_LENGTH * FACE_LENGTH * FACES_IN_ROW + (faceNumber - 1 - FACES_IN_ROW) * FACE_LENGTH;
-    }
-
-
-    public List<Face> getFaces() {
-        List<Face> faces = new ArrayList<>();
-        for (int i = 1; i < 7; i++) {
-            faces.add(getFace(i));
-        }
-        return faces;
     }
 
 }

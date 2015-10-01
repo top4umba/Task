@@ -2,7 +2,6 @@ import org.junit.Test
 import ru.tyanmt.task.common.Cube
 import ru.tyanmt.task.common.CubeASCII
 import ru.tyanmt.task.common.Face
-import ru.tyanmt.task.common.MatrixUtil
 import ru.tyanmt.task.solution.CubeAssembler
 import ru.tyanmt.task.util.Printer
 
@@ -59,24 +58,24 @@ public class TaskSecondTestSuite {
                 [1, 1, 1, 1, 1],
                 [0, 1, 1, 1, 0],
                 [1, 1, 1, 1, 1],
-                [1, 0, 1, 0, 0],
+                [1, 0, 1, 0, 0]
         ]
         int[][] faceCubeMatrix = [
                 [2, 0, 5, 0, 5],
                 [0, 0, 0, 0, 0],
                 [2, 0, 0, 0, 4],
                 [0, 0, 0, 0, 0],
-                [0, 3, 0, 3, 3],
+                [0, 3, 0, 3, 3]
         ]
-
-        int[][] adjacentEdges = [
+        int[][] neighborFaces = [
                 [0, 5, 5, 5, 0],
                 [2, 0, 0, 0, 4],
                 [2, 0, 0, 0, 4],
                 [2, 0, 0, 0, 4],
-                [0, 3, 3, 3, 0],
+                [0, 3, 3, 3, 0]
         ]
-        Face cubeFace = new Face(faceCubeMatrix,adjacentEdges);
+        Face cubeFace = new Face(faceCubeMatrix);
+        copyNeighborFaces(neighborFaces, cubeFace)
         //when
         boolean canBePlaced = isAppropriateFace(new Face(faceCandidateMatrix), cubeFace);
         //then
@@ -101,14 +100,15 @@ public class TaskSecondTestSuite {
                 [0, 0, 0, 0, 0],
         ]
 
-        int[][] adjacentEdges = [
+        int[][] neighborFaces = [
                 [0, 0, 0, 0, 0],
                 [2, 0, 0, 0, 0],
                 [2, 0, 0, 0, 0],
                 [2, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0],
         ]
-        Face cubeFace = new Face(faceCubeMatrix,adjacentEdges);
+        Face cubeFace = new Face(faceCubeMatrix);
+        copyNeighborFaces(neighborFaces, cubeFace)
         //when
         boolean canBePlaced = isAppropriateFace(new Face(faceCandidateMatrix), cubeFace);
         //then
@@ -132,14 +132,15 @@ public class TaskSecondTestSuite {
                 [0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0],
         ]
-        int[][] adjacentFaces = [
+        int[][] neighborFaces = [
                 [0, 2, 2, 2, 0],
                 [0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0],
         ]
-        Face cubeFace = new Face(faceCubeMatrix,adjacentFaces);
+        Face cubeFace = new Face(faceCubeMatrix);
+        copyNeighborFaces(neighborFaces, cubeFace)
         //when
         boolean canBePlaced = isAppropriateFace(new Face(faceCandidateMatrix), cubeFace);
         //then
@@ -151,26 +152,27 @@ public class TaskSecondTestSuite {
         //given
         int[][] faceCandidateMatrix = [
                 [0, 1, 0, 1, 0],
-                [1, 1, 1, 1, 1],
+                [0, 1, 1, 1, 1],
                 [0, 1, 1, 1, 0],
                 [1, 1, 1, 1, 1],
                 [1, 0, 1, 0, 0],
         ]
         int[][] faceCubeMatrix = [
                 [2, 0, 0, 0, 0],
-                [2, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
                 [2, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0],
         ]
-        int[][] adjacentEdges = [
+        int[][] neighborFaces = [
                 [0, 0, 0, 0, 0],
                 [2, 0, 0, 0, 0],
                 [2, 0, 0, 0, 0],
                 [2, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0],
         ]
-        Face cubeFace = new Face(faceCubeMatrix,adjacentEdges);
+        Face cubeFace = new Face(faceCubeMatrix);
+        copyNeighborFaces(neighborFaces, cubeFace)
         //when
         boolean canBePlaced = isAppropriateFace(new Face(faceCandidateMatrix), cubeFace);
         //then
@@ -195,9 +197,9 @@ public class TaskSecondTestSuite {
                 [0, 1, 0, 1, 0]
         ]
         //when
-        int[][] flippedFace = MatrixUtil.flipMatrix(face);
+        Face flippedFace = new Face(face).flip();
         //then
-        assertThat Arrays.deepEquals(controlFace, flippedFace), is(true)
+        assertThat Arrays.deepEquals(controlFace, flippedFace.matrix), is(true)
     }
 
     @Test
@@ -218,9 +220,9 @@ public class TaskSecondTestSuite {
                 [0, 0, 1, 1, 0]
         ]
         //when
-        int[][] rotatedFace = MatrixUtil.rotateMatrixClockwise(face);
+        Face roatedFace = new Face(face).rotateClockwise()
         //then
-        assertThat Arrays.deepEquals(controlFace, rotatedFace), is(true)
+        assertThat Arrays.deepEquals(controlFace, roatedFace.matrix), is(true)
     }
 
     @Test
@@ -266,14 +268,14 @@ public class TaskSecondTestSuite {
                 [1, 0, 0, 0, 3],
                 [0, 0, 0, 0, 0]
         ]
-        int[][] adjacentFaces = [
+        int[][] neighborFaces = [
                 [0, 2, 2, 2, 0],
                 [1, 0, 0, 0, 3],
                 [1, 0, 0, 0, 3],
                 [1, 0, 0, 0, 3],
                 [0, 0, 0, 0, 0]
         ]
-        int[][][] cube = [
+        int[][][] cubeArray = [
                 [[0, 2, 0, 2, 0],
                  [1, 0, 0, 0, 0],
                  [0, 0, 0, 0, 3],
@@ -300,10 +302,12 @@ public class TaskSecondTestSuite {
                 topFace
         ]
         //when
-        Face face = new Cube(cube).getFace(TOP);
+        Cube cube = new Cube();
+        initCube(cube, cubeArray)
+        Face face = cube.getFace(TOP);
         //then
         assertThat Arrays.deepEquals(face.matrix, topFace), is(true)
-        assertThat Arrays.deepEquals(face.adjacentFacesSection, adjacentFaces), is(true)
+        assertThat Arrays.deepEquals(face.neighborFaces, neighborFaces), is(true)
     }
 
     @Test
@@ -355,7 +359,8 @@ public class TaskSecondTestSuite {
                 [3, 3, 3, 3, 4],
                 [3, 0, 3, 0, 3]
         ]
-        Cube cube = new Cube(cubeArray)
+        Cube cube = new Cube();
+        initCube(cube, cubeArray)
         //when
         cube.putFaceOn(TOP, new Face(face))
         Face topFace = cube.getFace(TOP)
@@ -398,7 +403,9 @@ public class TaskSecondTestSuite {
                  [0, 0, 0, 0, 0],
                  [0, 0, 0, 0, 0]]
         ]
-        Cube cube = new Cube(cubeArray)
+
+        Cube cube = new Cube();
+        initCube(cube, cubeArray)
         //when
         int faceOne = getPointFromFace(BOTTOM,2,2,cube.cube)
         int faceTwo = getPointFromFace(FRONT,2,2,cube.cube)
@@ -451,7 +458,9 @@ public class TaskSecondTestSuite {
                  [0, 0, 0, 0, 0],
                  [0, 0, 0, 0, 0]]
         ]
-        Cube cube = new Cube(cubeArray)
+
+        Cube cube = new Cube();
+        initCube(cube, cubeArray)
         //when
         int faceOne = getPointFromFace(BOTTOM,2,2,cube.cube)
         int faceTwo = getPointFromFace(FRONT,2,2,cube.cube)
@@ -480,62 +489,61 @@ public class TaskSecondTestSuite {
                         [1, 1, 1, 1, 0],
                         [0, 1, 1, 1, 0],
                         [0, 1, 1, 1, 1],
-                        [0, 1, 1, 1, 1]
+                        [0, 1, 1, 1, 1],
+                ],
+                [
+                        [0, 1, 1, 1, 1],
+                        [0, 1, 1, 1, 1],
+                        [0, 1, 1, 1, 0],
+                        [1, 1, 1, 1, 0],
+                        [0, 0, 1, 1, 1],
                 ],
                 [
                         [0, 0, 0, 1, 0],
                         [1, 1, 1, 1, 0],
                         [1, 1, 1, 1, 1],
                         [1, 1, 1, 1, 1],
-                        [1, 1, 0, 0, 1]
-                ],
-                [
-                        [1, 1, 1, 1, 0],
-                        [1, 1, 1, 1, 0],
-                        [0, 1, 1, 1, 0],
-                        [0, 1, 1, 1, 1],
-                        [1, 1, 1, 0, 0]
-                ],
-                [
-                        [1, 0, 0, 1, 1],
-                        [1, 1, 1, 1, 1],
-                        [1, 1, 1, 1, 1],
-                        [0, 1, 1, 1, 1],
-                        [0, 1, 0, 0, 0]
+                        [1, 1, 0, 0, 1],
                 ],
                 [
                         [0, 1, 0, 0, 0],
                         [0, 1, 1, 1, 1],
                         [1, 1, 1, 1, 1],
                         [1, 1, 1, 1, 1],
-                        [1, 0, 0, 1, 1]
+                        [1, 0, 0, 1, 1],
+                ],
+                [
+                        [1, 1, 1, 1, 0],
+                        [1, 1, 1, 1, 0],
+                        [0, 1, 1, 1, 0],
+                        [0, 1, 1, 1, 1],
+                        [1, 1, 1, 0, 0],
                 ],
                 [
                         [1, 1, 1, 0, 0],
                         [0, 1, 1, 1, 1],
                         [0, 1, 1, 1, 0],
                         [1, 1, 1, 1, 0],
-                        [1, 1, 1, 1, 0]
+                        [1, 1, 1, 1, 0],
+                ],
+                [
+                        [1, 0, 0, 1, 1],
+                        [1, 1, 1, 1, 1],
+                        [1, 1, 1, 1, 1],
+                        [0, 1, 1, 1, 1],
+                        [0, 1, 0, 0, 0],
                 ],
                 [
                         [1, 1, 0, 0, 1],
                         [1, 1, 1, 1, 1],
                         [1, 1, 1, 1, 1],
                         [1, 1, 1, 1, 0],
-                        [0, 0, 0, 1, 0]
-                ],
-                [
-                        [0, 1, 1, 1, 1],
-                        [0, 1, 1, 1, 1],
-                        [0, 1, 1, 1, 0],
-                        [1, 1, 1, 1, 0],
-                        [0, 0, 1, 1, 1]
-                ],
-
+                        [0, 0, 0, 1, 0],
+                ]
         ]
 
         //when
-        List<Face> options = CubeAssembler.getRotateOptions(new Face(face));
+        List<Face> options = new Face(face).getRotateOptions();
         //then
         options.eachWithIndex {opt, i ->
             assertThat Arrays.deepEquals(opt.matrix, faces[i]), is(true)
@@ -558,6 +566,18 @@ public class TaskSecondTestSuite {
                 println "-----------------------"
                 println ""
                 Printer.print it
+            }
+        }
+    }
+
+    private void copyNeighborFaces(int[][] neighborFaces, cubeFace) {
+        (0..<5).each { i -> cubeFace.neighborFaces[i] = Arrays.copyOf(neighborFaces[i], 5) }
+    }
+
+    private void initCube(Cube cube, int[][][] cubeArray) {
+        for (int x = 0; x < 5; x++) {
+            for (int y = 0; y < 5; y++) {
+                cube.cube[x][y] = Arrays.copyOf(cubeArray[x][y], 5);
             }
         }
     }
