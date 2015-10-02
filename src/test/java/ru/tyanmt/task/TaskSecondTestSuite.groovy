@@ -1,3 +1,4 @@
+import org.hamcrest.collection.IsIterableContainingInOrder
 import org.junit.Test
 import ru.tyanmt.task.common.Cube
 import ru.tyanmt.task.common.CubeASCII
@@ -7,17 +8,16 @@ import ru.tyanmt.task.solution.CubeAssembler
 import ru.tyanmt.task.util.Printer
 
 import static org.hamcrest.Matchers.equalTo
-import static org.hamcrest.Matchers.is
 import static org.junit.Assert.assertThat
+import static org.junit.Assert.assertTrue
 import static ru.tyanmt.task.common.FaceMapper.getPointFromFace
-import static ru.tyanmt.task.common.FaceMergeValidator.isAppropriateFace
 import static ru.tyanmt.task.common.FacePosition.*
 
 public class TaskSecondTestSuite {
 
 
     @Test
-    public void shouldReturnCorrectSecondFace() {
+    public void shouldEncodeSecondFace() {
         //given
         int[][] controlFace = [
                 [2, 0, 2, 0, 2],
@@ -30,11 +30,11 @@ public class TaskSecondTestSuite {
         //when
         Face face = cube.getFace(2);
         //then
-        assertThat Arrays.deepEquals(face.matrix, controlFace), is(true)
+        assertTrue Arrays.deepEquals(face.matrix, controlFace)
     }
 
     @Test
-    public void shouldReturnCorrectFifthFace() {
+    public void shouldEncodeFifthFace() {
         //given
         int[][] controlFace = [
                 [0, 5, 0, 5, 0],
@@ -47,7 +47,7 @@ public class TaskSecondTestSuite {
         //when
         Face face = cube.getFace(5);
         //then
-        assertThat Arrays.deepEquals(face.matrix, controlFace), is(true)
+        assertTrue Arrays.deepEquals(face.matrix, controlFace)
     }
 
     @Test
@@ -79,7 +79,7 @@ public class TaskSecondTestSuite {
         //when
         boolean canBePlaced = new FaceMergeValidator(new Face(faceCandidateMatrix), cubeFace).validate();
         //then
-        assertThat canBePlaced, is(true)
+        assertTrue canBePlaced
     }
 
     @Test
@@ -112,7 +112,7 @@ public class TaskSecondTestSuite {
         //when
         boolean canBePlaced = new FaceMergeValidator(new Face(faceCandidateMatrix), cubeFace).validate();
         //then
-        assertThat canBePlaced, is(true)
+        assertTrue canBePlaced
     }
 
     @Test
@@ -144,7 +144,7 @@ public class TaskSecondTestSuite {
         //when
         boolean canBePlaced = new FaceMergeValidator(new Face(faceCandidateMatrix), cubeFace).validate();
         //then
-        assertThat canBePlaced, is(false)
+        assertTrue !canBePlaced
     }
 
     @Test
@@ -176,7 +176,7 @@ public class TaskSecondTestSuite {
         //when
         boolean canBePlaced = new FaceMergeValidator(new Face(faceCandidateMatrix), cubeFace).validate();
         //then
-        assertThat canBePlaced, is(false)
+        assertTrue !canBePlaced
     }
 
     @Test
@@ -199,7 +199,7 @@ public class TaskSecondTestSuite {
         //when
         Face flippedFace = new Face(face).flip();
         //then
-        assertThat Arrays.deepEquals(controlFace, flippedFace.matrix), is(true)
+        assertTrue Arrays.deepEquals(controlFace, flippedFace.matrix)
     }
 
     @Test
@@ -222,7 +222,7 @@ public class TaskSecondTestSuite {
         //when
         Face roatedFace = new Face(face).rotateClockwise()
         //then
-        assertThat Arrays.deepEquals(controlFace, roatedFace.matrix), is(true)
+        assertTrue Arrays.deepEquals(controlFace, roatedFace.matrix)
     }
 
     @Test
@@ -266,21 +266,22 @@ public class TaskSecondTestSuite {
                  [1, 0, 0, 0, 3],
                  [1, 0, 0, 0, 3],
                  [1, 0, 0, 0, 3]],
+
                 topFace
         ]
+
         //when
         Cube cube = new Cube();
         initCube(cube, cubeArray)
         Face face = cube.getFace(TOP);
         //then
-        assertThat Arrays.deepEquals(face.matrix, topFace), is(true)
-        assertThat Arrays.deepEquals(face.neighborFaces, neighborFaces), is(true)
+        assertTrue Arrays.deepEquals(face.matrix, topFace)
+        assertTrue Arrays.deepEquals(face.neighborFaces, neighborFaces)
     }
 
     @Test
     public void shouldPlaceOnTop() {
         //given
-        //TODO Fixed test with proper faces
         int[][] face = [
                 [3, 0, 0, 3, 3],
                 [3, 3, 3, 3, 0],
@@ -332,7 +333,7 @@ public class TaskSecondTestSuite {
         cube.tryPutFaceOn(TOP, new Face(face))
         Face topFace = cube.getFace(TOP)
         //then
-        assertThat Arrays.deepEquals(controlFace, topFace.matrix), is(true)
+        assertTrue Arrays.deepEquals(controlFace, topFace.matrix)
     }
 
 
@@ -374,12 +375,12 @@ public class TaskSecondTestSuite {
         Cube cube = new Cube();
         initCube(cube, cubeArray)
         //when
-        int faceOne = getPointFromFace(BOTTOM,2,2,cube.cube)
-        int faceTwo = getPointFromFace(FRONT,2,2,cube.cube)
-        int faceThree = getPointFromFace(TOP,2,2,cube.cube)
-        int faceFour = getPointFromFace(RIGHT,2,2,cube.cube)
-        int faceFive = getPointFromFace(REAR,2,2,cube.cube)
-        int faceSix = getPointFromFace(LEFT,2,2,cube.cube)
+        int faceOne = getPointFromFace(BOTTOM, 2, 2, cube.cube)
+        int faceTwo = getPointFromFace(FRONT, 2, 2, cube.cube)
+        int faceThree = getPointFromFace(TOP, 2, 2, cube.cube)
+        int faceFour = getPointFromFace(RIGHT, 2, 2, cube.cube)
+        int faceFive = getPointFromFace(REAR, 2, 2, cube.cube)
+        int faceSix = getPointFromFace(LEFT, 2, 2, cube.cube)
         //then
         assertThat faceOne, equalTo(1)
         assertThat faceTwo, equalTo(2)
@@ -390,9 +391,8 @@ public class TaskSecondTestSuite {
     }
 
 
-
     @Test
-    public void shouldPrintCube() {
+    public void shouldEncodeCube() {
         //given
         int[][][] cubeArray = [
                 [[0, 0, 0, 0, 0],
@@ -409,7 +409,7 @@ public class TaskSecondTestSuite {
 
                 [[0, 0, 2, 0, 0],
                  [0, 0, 0, 0, 0],
-                 [4, 0, 0, 0, 6],
+                 [6, 0, 0, 0, 4],
                  [0, 0, 0, 0, 0],
                  [0, 0, 5, 0, 0]],
 
@@ -429,14 +429,29 @@ public class TaskSecondTestSuite {
         Cube cube = new Cube();
         initCube(cube, cubeArray)
         //when
-        int faceOne = getPointFromFace(BOTTOM,2,2,cube.cube)
-        int faceTwo = getPointFromFace(FRONT,2,2,cube.cube)
-        int faceThree = getPointFromFace(TOP,2,2,cube.cube)
-        int faceFour = getPointFromFace(RIGHT,2,2,cube.cube)
-        int faceFive = getPointFromFace(REAR,2,2,cube.cube)
-        int faceSix = getPointFromFace(LEFT,2,2,cube.cube)
         //then
-        //TODO Print cube
+        def controlList = ["               ",
+                           "               ",
+                           "  o    o    o  ",
+                           "               ",
+                           "               ",
+                           "          ",
+                           "          ",
+                           "       o  ",
+                           "          ",
+                           "          ",
+                           "          ",
+                           "          ",
+                           "       o  ",
+                           "          ",
+                           "          ",
+                           "          ",
+                           "          ",
+                           "       o  ",
+                           "          ",
+                           "          "] as String[]
+        assertThat Printer.encodeFaces(cube), IsIterableContainingInOrder.contains(controlList)
+
     }
 
 
@@ -512,8 +527,8 @@ public class TaskSecondTestSuite {
         //when
         List<Face> options = new Face(face).getRotateOptions();
         //then
-        options.eachWithIndex {opt, i ->
-            assertThat Arrays.deepEquals(opt.matrix, faces[i]), is(true)
+        options.eachWithIndex { opt, i ->
+            assertTrue Arrays.deepEquals(opt.matrix, faces[i])
         }
     }
 
@@ -525,18 +540,8 @@ public class TaskSecondTestSuite {
         //when
         assembler.assembleCube(blueCube);
         //then
-        println assembler.solutions.size()
-
-        if (!assembler.solutions.empty) {
-            assembler.solutions.each {
-                println ""
-                println "-----------------------"
-                println ""
-                Printer.print it
-            }
-        }
+        assertThat assembler.solutions.size(), equalTo(3)
     }
-
 
 
     private void copyNeighborFaces(int[][] neighborFaces, cubeFace) {

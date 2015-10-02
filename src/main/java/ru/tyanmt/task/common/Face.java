@@ -7,9 +7,6 @@ import java.util.stream.IntStream;
 
 import static ru.tyanmt.task.common.Cube.FACE_LENGTH;
 
-/**
- * Created by mityan on 10.08.2015.
- */
 public class Face {
 
     private final int[][] matrix = new int[FACE_LENGTH][FACE_LENGTH];

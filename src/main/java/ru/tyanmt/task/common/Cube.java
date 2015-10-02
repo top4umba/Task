@@ -7,9 +7,6 @@ import java.util.stream.IntStream;
 import static ru.tyanmt.task.common.FaceMapper.*;
 import static ru.tyanmt.task.common.FaceMergeValidator.*;
 
-/**
- * Created by mityan on 07.08.2015.
- */
 public class Cube {
 
     public static final int FACE_LENGTH = 5;
@@ -49,10 +46,10 @@ public class Cube {
         return true;
     }
 
-    private void addFaceOnSide(FacePosition position, Face faceCandidate) {
+    private void addFaceOnSide(FacePosition position, Face face) {
         IntStream.range(0, FACE_LENGTH).forEach(x ->
                         IntStream.range(0, FACE_LENGTH).forEach(y -> {
-                                    if (faceCandidate.getPoint(x, y) != 0) {
+                                    if (face.getPoint(x, y) != 0) {
                                         setPointToFace(position, x, y, cube);
                                     }
                                 }

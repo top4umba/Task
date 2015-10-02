@@ -5,9 +5,6 @@ import java.util.stream.IntStream;
 
 import static ru.tyanmt.task.common.Cube.FACE_LENGTH;
 
-/**
- * Created by top4umba on 10.08.2015.
- */
 public class FaceMergeValidator {
 
     private final Face candidateFace;
@@ -22,7 +19,7 @@ public class FaceMergeValidator {
         boolean foundConflict = IntStream.range(0, FACE_LENGTH).flatMap(x ->
                         IntStream.range(0, FACE_LENGTH)
                                 .filter(y -> pointsIntersect()
-                                        .or(pointStillEmpty().and(isVertexAndNeighborFacesFilled().or(isNotVertexAndNeighborFaceFilled()))).test(x, y))
+                                        .or(pointStillEmpty().and(isVertexAndBothNeighborFacesFilled().or(isNotVertexAndNeighborFaceFilled()))).test(x, y))
         ).findAny().isPresent();
         return !foundConflict;
     }
@@ -35,7 +32,7 @@ public class FaceMergeValidator {
         return (x, y) -> !isEmpty(candidateFace.getPoint(x, y)) && !isEmpty(cubeFace.getPoint(x, y));
     }
 
-    private BiPredicate<Integer, Integer> isVertexAndNeighborFacesFilled() {
+    private BiPredicate<Integer, Integer> isVertexAndBothNeighborFacesFilled() {
         return (x, y) -> isVertex(x, y) && !isAnyNeighborFaceEmpty(x, y);
     }
 

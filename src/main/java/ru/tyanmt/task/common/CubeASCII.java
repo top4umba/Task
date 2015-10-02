@@ -6,9 +6,6 @@ import java.util.stream.IntStream;
 
 import static ru.tyanmt.task.common.Cube.FACE_LENGTH;
 
-/**
- * Created by mityan on 10.08.2015.
- */
 public class CubeASCII {
     private static final int FACES_IN_ROW = 3;
 
@@ -40,14 +37,14 @@ public class CubeASCII {
         Face face = new Face();
         int rowNumber = 0;
         while (readingIsNotFinished(position, rowNumber)) {
-            radLine(position, faceNumber, face, rowNumber);
+            readLine(position, faceNumber, face, rowNumber);
             rowNumber++;
             position += FACES_IN_ROW * FACE_LENGTH;
         }
         return face;
     }
 
-    private void radLine(int position, int faceNumber, Face face, int rowNumber) {
+    private void readLine(int position, int faceNumber, Face face, int rowNumber) {
         String row = TEXT.substring(position, position + FACE_LENGTH);
         IntStream.range(0,row.length()).forEach(i ->
                 face.setPoint(rowNumber, i, row.charAt(i) == 'o' ? faceNumber : 0)

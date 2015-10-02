@@ -2,9 +2,6 @@ package ru.tyanmt.task.common;
 
 import static ru.tyanmt.task.common.Cube.FACE_LENGTH;
 
-/**
- * Created by mityan on 17.08.2015.
- */
 public class FaceMapper {
 
 
@@ -44,7 +41,7 @@ public class FaceMapper {
     }
 
     public static void setPointToFace(FacePosition position, int i, int j, int[][][] cube) {
-        int faceNumber = position.ordinal()+1;
+        int faceNumber = position.ordinal() + 1;
         switch (position) {
             case BOTTOM:
                 cube[0][i][j] = faceNumber;
