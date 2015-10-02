@@ -20,12 +20,10 @@ public class Printer {
     public static void print(Cube cube) {
         List<String> asciiFaces = new ArrayList<>();
         List<Face> faces = Arrays.stream(FacePosition.values())
-                .map(position ->
-                                position == REAR || position == LEFT ?
-                                        cube.getFace(position).flipHorizontally().transpose() :
-                                        cube.getFace(position).transpose()
+                .map(position -> position == REAR || position == LEFT ?
+                                cube.getFace(position).flipHorizontally().transpose() :
+                                cube.getFace(position).transpose()
                 ).collect(Collectors.toList());
-
         asciiFaces.addAll(encodeFirstThreeFaces(faces));
         asciiFaces.addAll(encodeOtherThreeFaces(faces));
         printFaces(asciiFaces);

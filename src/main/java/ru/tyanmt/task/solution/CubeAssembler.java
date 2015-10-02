@@ -22,17 +22,17 @@ public class CubeAssembler {
     public void assembleCube(CubeASCII flatCube) {
         Cube cube = new Cube();
         List<Face> faces = flatCube.getFaces();
-        cube.putFaceOn(FacePosition.BOTTOM, faces.remove(0));
+        cube.tryPutFaceOn(FacePosition.BOTTOM, faces.remove(0));
         addFaceTo(cube, FacePosition.FRONT, faces);
     }
 
     private void addFaceTo(Cube cube, FacePosition facePosition, List<Face> faces) {
         faces.stream().forEach(face -> {
             Cube cubeCandidate = new Cube(cube);
-            final List<Face> remainingFaces = new ArrayList<>(faces);
+            List<Face> remainingFaces = new ArrayList<>(faces);
             remainingFaces.remove(face);
             face.getRotateOptions().stream()
-                    .filter(faceOption -> cubeCandidate.putFaceOn(facePosition, faceOption))
+                    .filter(faceOption -> cubeCandidate.tryPutFaceOn(facePosition, faceOption))
                     .forEach(faceOption -> {
                         if (facePosition.hasNext()) {
                             addFaceTo(cubeCandidate, facePosition.next(), remainingFaces);

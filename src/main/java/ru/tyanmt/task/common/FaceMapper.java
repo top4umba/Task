@@ -27,7 +27,7 @@ public class FaceMapper {
         }
     }
 
-    public static int getPointFromSection(FacePosition position, int i, int j, int[][][] cube) {
+    public static int getPointFromNeighborFace(FacePosition position, int i, int j, int[][][] cube) {
         switch (position) {
             case BOTTOM:
             case TOP:

@@ -19,22 +19,22 @@ public class Face {
     }
 
     private Face(int[][] matrix) {
-        IntStream.range(0,FACE_LENGTH).forEach(i -> this.matrix[i] = Arrays.copyOf(matrix[i], FACE_LENGTH));
+        IntStream.range(0, FACE_LENGTH).forEach(i -> this.matrix[i] = Arrays.copyOf(matrix[i], FACE_LENGTH));
     }
 
-    public void setPoint(int x, int y, int value){
-        matrix[x][y]=value;
+    public void setPoint(int x, int y, int value) {
+        matrix[x][y] = value;
     }
 
-    public int getPoint(int x, int y){
+    public int getPoint(int x, int y) {
         return matrix[x][y];
     }
 
-    public int getNeighborAt(int x, int y){
+    public int getNeighborAt(int x, int y) {
         return neighborFaces[x][y];
     }
 
-    public void setNeighborAt(int x, int y, int value){
+    public void setNeighborAt(int x, int y, int value) {
         neighborFaces[x][y] = value;
     }
 
@@ -51,41 +51,41 @@ public class Face {
         return result;
     }
 
-    public Face flip(){
+    public Face flip() {
         int[][] flippedMatrix = new int[FACE_LENGTH][FACE_LENGTH];
-        for (int x = 0; x < FACE_LENGTH; x++) {
-            flippedMatrix[x] = matrix[FACE_LENGTH - 1 - x];
-        }
+        IntStream.range(0, FACE_LENGTH).forEach(x ->
+                        flippedMatrix[x] = matrix[FACE_LENGTH - 1 - x]
+        );
         return new Face(flippedMatrix);
     }
 
-    public Face rotateClockwise(){
+    public Face rotateClockwise() {
         int[][] rotatedMatrix = new int[FACE_LENGTH][FACE_LENGTH];
-        for (int x = 0; x < FACE_LENGTH; x++) {
-            for (int y = 0; y < FACE_LENGTH; y++) {
-                rotatedMatrix[y][FACE_LENGTH - 1 - x] = matrix[x][y];
-            }
-        }
+        IntStream.range(0, FACE_LENGTH).forEach(x ->
+                        IntStream.range(0, FACE_LENGTH).forEach(y ->
+                                        rotatedMatrix[y][FACE_LENGTH - 1 - x] = matrix[x][y]
+                        )
+        );
         return new Face(rotatedMatrix);
     }
 
     public Face flipHorizontally() {
         int[][] flippedMatrix = new int[FACE_LENGTH][FACE_LENGTH];
-        for (int x = 0; x < FACE_LENGTH; x++) {
-            for (int y = 0; y < FACE_LENGTH; y++) {
-                flippedMatrix[x][y] = matrix[x][FACE_LENGTH - 1 - y];
-            }
-        }
+        IntStream.range(0, FACE_LENGTH).forEach(x ->
+                        IntStream.range(0, FACE_LENGTH).forEach(y ->
+                                        flippedMatrix[x][y] = matrix[x][FACE_LENGTH - 1 - y]
+                        )
+        );
         return new Face(flippedMatrix);
     }
 
     public Face transpose() {
         int[][] transposedMatrix = new int[FACE_LENGTH][FACE_LENGTH];
-        for (int x = 0; x < FACE_LENGTH; x++) {
-            for (int y = 0; y < FACE_LENGTH; y++) {
-                transposedMatrix[x][y] = matrix[y][x];
-            }
-        }
+        IntStream.range(0, FACE_LENGTH).forEach(x ->
+                        IntStream.range(0, FACE_LENGTH).forEach(y ->
+                                        transposedMatrix[x][y] = matrix[y][x]
+                        )
+        );
         return new Face(transposedMatrix);
     }
 }

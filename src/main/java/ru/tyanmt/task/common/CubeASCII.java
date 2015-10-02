@@ -1,6 +1,5 @@
 package ru.tyanmt.task.common;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -13,7 +12,7 @@ import static ru.tyanmt.task.common.Cube.FACE_LENGTH;
 public class CubeASCII {
     private static final int FACES_IN_ROW = 3;
 
-    private final String TEXT =
+    private static final String TEXT =
                     "  o  o o o  o  " +
                     " ooo ooooo oooo" +
                     "ooooo ooo oooo " +
@@ -26,7 +25,7 @@ public class CubeASCII {
                     "oo o o o  oo oo";
 
     public List<Face> getFaces() {
-        return IntStream.rangeClosed(1,6).mapToObj(i -> getFace(i)).collect(Collectors.toList());
+        return IntStream.rangeClosed(1,6).mapToObj(this::getFace).collect(Collectors.toList());
     }
 
     public Face getFace(int faceNumber) {
@@ -40,15 +39,23 @@ public class CubeASCII {
     private Face readFaceAt(int position, int faceNumber) {
         Face face = new Face();
         int rowNumber = 0;
-        while (position < TEXT.length() && rowNumber < FACE_LENGTH) {
-            String row = TEXT.substring(position, position + FACE_LENGTH);
-            for (int i = 0; i < row.length(); i++) {
-                face.setPoint(rowNumber, i, row.charAt(i) == 'o' ? faceNumber : 0);
-            }
+        while (readingIsNotFinished(position, rowNumber)) {
+            radLine(position, faceNumber, face, rowNumber);
             rowNumber++;
             position += FACES_IN_ROW * FACE_LENGTH;
         }
         return face;
+    }
+
+    private void radLine(int position, int faceNumber, Face face, int rowNumber) {
+        String row = TEXT.substring(position, position + FACE_LENGTH);
+        IntStream.range(0,row.length()).forEach(i ->
+                face.setPoint(rowNumber, i, row.charAt(i) == 'o' ? faceNumber : 0)
+        );
+    }
+
+    private boolean readingIsNotFinished(int position, int rowNumber) {
+        return position < TEXT.length() && rowNumber < FACE_LENGTH;
     }
 
     private int getPositionInFirstRow(int faceNumber) {

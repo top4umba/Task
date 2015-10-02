@@ -1,5 +1,8 @@
 package ru.tyanmt.task.common;
 
+import java.util.function.BiPredicate;
+import java.util.stream.IntStream;
+
 import static ru.tyanmt.task.common.Cube.FACE_LENGTH;
 
 /**
@@ -7,59 +10,53 @@ import static ru.tyanmt.task.common.Cube.FACE_LENGTH;
  */
 public class FaceMergeValidator {
 
-    public static boolean isAppropriateFace(Face faceCandidate, Face cubeFace) {
-        if (!isVerticesAccessible(cubeFace)) return false;
-        for (int x = 0; x < FACE_LENGTH; x++) {
-            for (int y = 0; y < FACE_LENGTH; y++) {
-                if (isEmpty(cubeFace.getPoint(x, y))) {
-                    if (isEmpty(faceCandidate.getPoint(x, y))) {
-                        if (isVertex(x, y)) {
-                            if (!isAnyNeighborFaceEmpty(cubeFace, x, y)) return false;
-                        } else {
-                            if (isEdge(x, y) && !isNeighborEdgeEmpty(cubeFace, x, y)) return false;
-                        }
-                    }
-                } else {
-                    if (!isEmpty(faceCandidate.getPoint(x, y))) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
+    private final Face candidateFace;
+    private final Face cubeFace;
+
+    public FaceMergeValidator(Face candidateFace, Face cubeFace) {
+        this.candidateFace = candidateFace;
+        this.cubeFace = cubeFace;
     }
 
-    private static boolean isVerticesAccessible(Face face) {
-        for (int x = 0; x < FACE_LENGTH; x += lastIndex()) {
-            for (int y = 0; y < FACE_LENGTH; y += lastIndex()) {
-                int vertex = face.getPoint(x, y);
-                int horNeighborPoint = face.getPoint(getNeighborCoordinate(x), y);
-                int verNeighborPoint = face.getPoint(x, getNeighborCoordinate(y));
-                if (isEmpty(vertex) &&
-                        !isEmpty(horNeighborPoint) &&
-                        !isEmpty(verNeighborPoint) &&
-                        horNeighborPoint != verNeighborPoint) {
-                    return false;
-                }
-            }
-        }
-        return true;
+    public boolean validate() {
+        boolean foundConflict = IntStream.range(0, FACE_LENGTH).flatMap(x ->
+                        IntStream.range(0, FACE_LENGTH)
+                                .filter(y -> pointsIntersect()
+                                        .or(pointStillEmpty().and(isVertexAndNeighborFacesFilled().or(isNotVertexAndNeighborFaceFilled()))).test(x, y))
+        ).findAny().isPresent();
+        return !foundConflict;
     }
 
-    private static int getNeighborCoordinate(int x) {
+    private BiPredicate<Integer, Integer> pointStillEmpty() {
+        return (x, y) -> isEmpty(candidateFace.getPoint(x, y)) && isEmpty(cubeFace.getPoint(x, y));
+    }
+
+    private BiPredicate<Integer, Integer> pointsIntersect() {
+        return (x, y) -> !isEmpty(candidateFace.getPoint(x, y)) && !isEmpty(cubeFace.getPoint(x, y));
+    }
+
+    private BiPredicate<Integer, Integer> isVertexAndNeighborFacesFilled() {
+        return (x, y) -> isVertex(x, y) && !isAnyNeighborFaceEmpty(x, y);
+    }
+
+    private BiPredicate<Integer, Integer> isNotVertexAndNeighborFaceFilled() {
+        return (x, y) -> !isVertex(x, y) && !isNeighborFaceEmpty(x, y);
+    }
+
+    private int getNeighborCoordinate(int x) {
         return x == 0 ? 1 : penultimateIndex();
     }
 
-    private static boolean isEmpty(int value) {
+    private boolean isEmpty(int value) {
         return value == 0;
     }
 
-    private static boolean isNeighborEdgeEmpty(Face face, int x, int y) {
-        return face.getNeighborAt(x, y) == 0;
+    private boolean isNeighborFaceEmpty(int x, int y) {
+        return cubeFace.getNeighborAt(x, y) == 0;
     }
 
-    private static boolean isAnyNeighborFaceEmpty(Face face, int x, int y) {
-        return face.getNeighborAt(getNeighborCoordinate(x), y) == 0 || face.getNeighborAt(x, getNeighborCoordinate(y)) == 0;
+    private boolean isAnyNeighborFaceEmpty(int x, int y) {
+        return cubeFace.getNeighborAt(getNeighborCoordinate(x), y) == 0 || cubeFace.getNeighborAt(x, getNeighborCoordinate(y)) == 0;
     }
 
     public static boolean isVertex(int x, int y) {
@@ -74,7 +71,7 @@ public class FaceMergeValidator {
         return FACE_LENGTH - 1;
     }
 
-    private static int penultimateIndex() {
+    private int penultimateIndex() {
         return lastIndex() - 1;
     }
 }

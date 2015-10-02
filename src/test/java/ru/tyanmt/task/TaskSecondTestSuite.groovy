@@ -2,6 +2,7 @@ import org.junit.Test
 import ru.tyanmt.task.common.Cube
 import ru.tyanmt.task.common.CubeASCII
 import ru.tyanmt.task.common.Face
+import ru.tyanmt.task.common.FaceMergeValidator
 import ru.tyanmt.task.solution.CubeAssembler
 import ru.tyanmt.task.util.Printer
 
@@ -10,7 +11,6 @@ import static org.hamcrest.Matchers.is
 import static org.junit.Assert.assertThat
 import static ru.tyanmt.task.common.FaceMapper.getPointFromFace
 import static ru.tyanmt.task.common.FaceMergeValidator.isAppropriateFace
-import static ru.tyanmt.task.common.FaceMergeValidator.isVerticesAccessible
 import static ru.tyanmt.task.common.FacePosition.*
 
 public class TaskSecondTestSuite {
@@ -77,7 +77,7 @@ public class TaskSecondTestSuite {
         Face cubeFace = new Face(faceCubeMatrix);
         copyNeighborFaces(neighborFaces, cubeFace)
         //when
-        boolean canBePlaced = isAppropriateFace(new Face(faceCandidateMatrix), cubeFace);
+        boolean canBePlaced = new FaceMergeValidator(new Face(faceCandidateMatrix), cubeFace).validate();
         //then
         assertThat canBePlaced, is(true)
     }
@@ -110,7 +110,7 @@ public class TaskSecondTestSuite {
         Face cubeFace = new Face(faceCubeMatrix);
         copyNeighborFaces(neighborFaces, cubeFace)
         //when
-        boolean canBePlaced = isAppropriateFace(new Face(faceCandidateMatrix), cubeFace);
+        boolean canBePlaced = new FaceMergeValidator(new Face(faceCandidateMatrix), cubeFace).validate();
         //then
         assertThat canBePlaced, is(true)
     }
@@ -142,7 +142,7 @@ public class TaskSecondTestSuite {
         Face cubeFace = new Face(faceCubeMatrix);
         copyNeighborFaces(neighborFaces, cubeFace)
         //when
-        boolean canBePlaced = isAppropriateFace(new Face(faceCandidateMatrix), cubeFace);
+        boolean canBePlaced = new FaceMergeValidator(new Face(faceCandidateMatrix), cubeFace).validate();
         //then
         assertThat canBePlaced, is(false)
     }
@@ -174,7 +174,7 @@ public class TaskSecondTestSuite {
         Face cubeFace = new Face(faceCubeMatrix);
         copyNeighborFaces(neighborFaces, cubeFace)
         //when
-        boolean canBePlaced = isAppropriateFace(new Face(faceCandidateMatrix), cubeFace);
+        boolean canBePlaced = new FaceMergeValidator(new Face(faceCandidateMatrix), cubeFace).validate();
         //then
         assertThat canBePlaced, is(false)
     }
@@ -224,39 +224,6 @@ public class TaskSecondTestSuite {
         //then
         assertThat Arrays.deepEquals(controlFace, roatedFace.matrix), is(true)
     }
-
-    @Test
-    public void shouldReturnFalseWhenVerticesAreNotAccessible() {
-        //given
-        int[][] face = [
-                [0, 2, 0, 2, 0],
-                [1, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0],
-                [1, 0, 0, 0, 0],
-                [1, 0, 0, 0, 0]
-        ]
-        //when
-        boolean isVerticesAccessible = isVerticesAccessible(new Face(face));
-        //then
-        assertThat isVerticesAccessible, is(false)
-    }
-
-    @Test
-    public void shouldReturnTrueWhenVerticesAreAccessible() {
-        //given
-        int[][] face = [
-                [0, 0, 0, 2, 1],
-                [1, 0, 0, 0, 3],
-                [0, 0, 0, 0, 0],
-                [1, 0, 0, 0, 0],
-                [1, 0, 4, 0, 0]
-        ]
-        //when
-        boolean isVerticesAccesible = isVerticesAccessible(new Face(face));
-        //then
-        assertThat isVerticesAccesible, is(true)
-    }
-
 
     @Test
     public void shouldReturnTop() {
@@ -362,7 +329,7 @@ public class TaskSecondTestSuite {
         Cube cube = new Cube();
         initCube(cube, cubeArray)
         //when
-        cube.putFaceOn(TOP, new Face(face))
+        cube.tryPutFaceOn(TOP, new Face(face))
         Face topFace = cube.getFace(TOP)
         //then
         assertThat Arrays.deepEquals(controlFace, topFace.matrix), is(true)
@@ -569,6 +536,8 @@ public class TaskSecondTestSuite {
             }
         }
     }
+
+
 
     private void copyNeighborFaces(int[][] neighborFaces, cubeFace) {
         (0..<5).each { i -> cubeFace.neighborFaces[i] = Arrays.copyOf(neighborFaces[i], 5) }

@@ -1,6 +1,8 @@
 package ru.tyanmt.task.common;
 
 import java.util.Arrays;
+import java.util.function.Function;
+import java.util.stream.IntStream;
 
 import static ru.tyanmt.task.common.FaceMapper.*;
 import static ru.tyanmt.task.common.FaceMergeValidator.*;
@@ -18,40 +20,43 @@ public class Cube {
     }
 
     public Cube(Cube cube) {
-        for (int x = 0; x < FACE_LENGTH; x++) {
-            for (int y = 0; y < FACE_LENGTH; y++) {
-                this.cube[x][y] = Arrays.copyOf(cube.cube[x][y], FACE_LENGTH);
-            }
-        }
+        IntStream.range(0, FACE_LENGTH).forEach(x ->
+                        IntStream.range(0, FACE_LENGTH).forEach(y ->
+                                        this.cube[x][y] = Arrays.copyOf(cube.cube[x][y], FACE_LENGTH)
+                        )
+        );
     }
 
     public Face getFace(FacePosition position) {
         Face face = new Face();
-        for (int x = 0; x < FACE_LENGTH; x++) {
-            for (int y = 0; y < FACE_LENGTH; y++) {
-                face.setPoint(x, y, getPointFromFace(position, x, y, cube));
-                if (isEdge(x, y) && !isVertex(x, y)) {
-                    face.setNeighborAt(x, y, getPointFromSection(position, x, y, cube));
-                }
-            }
-        }
+        IntStream.range(0, FACE_LENGTH).forEach(x ->
+                        IntStream.range(0, FACE_LENGTH).forEach(y -> {
+                                    face.setPoint(x, y, getPointFromFace(position, x, y, cube));
+                                    if (isEdge(x, y) && !isVertex(x, y)) {
+                                        face.setNeighborAt(x, y, getPointFromNeighborFace(position, x, y, cube));
+                                    }
+                                }
+                        )
+        );
+
         return face;
     }
 
-    public boolean putFaceOn(FacePosition position, Face faceCandidate) {
+    public boolean tryPutFaceOn(FacePosition position, Face faceCandidate) {
         Face cubeFace = this.getFace(position);
-        if (!isAppropriateFace(faceCandidate, cubeFace)) return false;
+        if (!new FaceMergeValidator(faceCandidate, cubeFace).validate()) return false;
         addFaceOnSide(position, faceCandidate);
         return true;
     }
 
     private void addFaceOnSide(FacePosition position, Face faceCandidate) {
-        for (int x = 0; x < FACE_LENGTH; x++) {
-            for (int y = 0; y < FACE_LENGTH; y++) {
-                if (faceCandidate.getPoint(x, y) != 0) {
-                    setPointToFace(position, x, y, cube);
-                }
-            }
-        }
+        IntStream.range(0, FACE_LENGTH).forEach(x ->
+                        IntStream.range(0, FACE_LENGTH).forEach(y -> {
+                                    if (faceCandidate.getPoint(x, y) != 0) {
+                                        setPointToFace(position, x, y, cube);
+                                    }
+                                }
+                        )
+        );
     }
 }
