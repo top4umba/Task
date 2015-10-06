@@ -1,23 +1,21 @@
-import org.hamcrest.collection.IsIterableContainingInOrder
 import org.junit.Test
 import ru.tyanmt.task.common.Cube
 import ru.tyanmt.task.common.CubeASCII
 import ru.tyanmt.task.common.Face
 import ru.tyanmt.task.common.FaceMergeValidator
 import ru.tyanmt.task.solution.CubeAssembler
-import ru.tyanmt.task.util.Printer
 
 import static org.hamcrest.Matchers.equalTo
+import static org.junit.Assert.assertFalse
 import static org.junit.Assert.assertThat
 import static org.junit.Assert.assertTrue
-import static ru.tyanmt.task.common.FaceMapper.getPointFromFace
 import static ru.tyanmt.task.common.FacePosition.*
 
 public class TaskSecondTestSuite {
 
 
     @Test
-    public void shouldEncodeSecondFace() {
+    public void shouldReadSecondFace() {
         //given
         int[][] controlFace = [
                 [2, 0, 2, 0, 2],
@@ -26,15 +24,15 @@ public class TaskSecondTestSuite {
                 [2, 2, 2, 2, 2],
                 [2, 0, 2, 0, 2],
         ]
-        CubeASCII cube = new CubeASCII();
+        CubeASCII cube = new CubeASCII("blueCube.txt");
         //when
-        Face face = cube.getFace(2);
+        Face face = cube.readFace(2);
         //then
         assertTrue Arrays.deepEquals(face.matrix, controlFace)
     }
 
     @Test
-    public void shouldEncodeFifthFace() {
+    public void shouldReadFifthFace() {
         //given
         int[][] controlFace = [
                 [0, 5, 0, 5, 0],
@@ -43,9 +41,9 @@ public class TaskSecondTestSuite {
                 [5, 5, 5, 5, 5],
                 [5, 0, 5, 0, 0],
         ]
-        CubeASCII cube = new CubeASCII();
+        CubeASCII cube = new CubeASCII("blueCube.txt");
         //when
-        Face face = cube.getFace(5);
+        Face face = cube.readFace(5);
         //then
         assertTrue Arrays.deepEquals(face.matrix, controlFace)
     }
@@ -144,7 +142,7 @@ public class TaskSecondTestSuite {
         //when
         boolean canBePlaced = new FaceMergeValidator(new Face(faceCandidateMatrix), cubeFace).validate();
         //then
-        assertTrue !canBePlaced
+        assertFalse canBePlaced
     }
 
     @Test
@@ -176,7 +174,7 @@ public class TaskSecondTestSuite {
         //when
         boolean canBePlaced = new FaceMergeValidator(new Face(faceCandidateMatrix), cubeFace).validate();
         //then
-        assertTrue !canBePlaced
+        assertFalse canBePlaced
     }
 
     @Test
@@ -190,11 +188,11 @@ public class TaskSecondTestSuite {
                 [1, 0, 1, 0, 0]
         ]
         int[][] controlFace = [
-                [1, 0, 1, 0, 0],
+                [0, 1, 0, 1, 0],
+                [1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 0],
                 [0, 1, 1, 1, 1],
-                [1, 1, 1, 1, 1],
-                [0, 1, 0, 1, 0]
+                [0, 0, 1, 0, 1]
         ]
         //when
         Face flippedFace = new Face(face).flip();
@@ -220,9 +218,9 @@ public class TaskSecondTestSuite {
                 [0, 0, 1, 1, 0]
         ]
         //when
-        Face roatedFace = new Face(face).rotateClockwise()
+        Face rotatedFace = new Face(face).rotateClockwise()
         //then
-        assertTrue Arrays.deepEquals(controlFace, roatedFace.matrix)
+        assertTrue Arrays.deepEquals(controlFace, rotatedFace.matrix)
     }
 
     @Test
@@ -375,19 +373,19 @@ public class TaskSecondTestSuite {
         Cube cube = new Cube();
         initCube(cube, cubeArray)
         //when
-        int faceOne = getPointFromFace(BOTTOM, 2, 2, cube.cube)
-        int faceTwo = getPointFromFace(FRONT, 2, 2, cube.cube)
-        int faceThree = getPointFromFace(TOP, 2, 2, cube.cube)
-        int faceFour = getPointFromFace(RIGHT, 2, 2, cube.cube)
-        int faceFive = getPointFromFace(REAR, 2, 2, cube.cube)
-        int faceSix = getPointFromFace(LEFT, 2, 2, cube.cube)
+        int bottomFace = BOTTOM.getPoint(2, 2, cube.cube)
+        int frontFace = FRONT.getPoint(2, 2, cube.cube)
+        int topFace = TOP.getPoint(2, 2, cube.cube)
+        int rightFace = RIGHT.getPoint(2, 2, cube.cube)
+        int rearFace = REAR.getPoint(2, 2, cube.cube)
+        int leftFace = LEFT.getPoint(2, 2, cube.cube)
         //then
-        assertThat faceOne, equalTo(1)
-        assertThat faceTwo, equalTo(2)
-        assertThat faceThree, equalTo(3)
-        assertThat faceFour, equalTo(4)
-        assertThat faceFive, equalTo(5)
-        assertThat faceSix, equalTo(6)
+        assertThat bottomFace, equalTo(1)
+        assertThat frontFace, equalTo(2)
+        assertThat topFace, equalTo(3)
+        assertThat rightFace, equalTo(4)
+        assertThat rearFace, equalTo(5)
+        assertThat leftFace, equalTo(6)
     }
 
 
@@ -428,29 +426,30 @@ public class TaskSecondTestSuite {
 
         Cube cube = new Cube();
         initCube(cube, cubeArray)
+
+        def controlString = "               \n" +
+                            "               \n" +
+                            "  o    o    o  \n" +
+                            "               \n" +
+                            "               \n" +
+                            "          \n" +
+                            "          \n" +
+                            "       o  \n" +
+                            "          \n" +
+                            "          \n" +
+                            "          \n" +
+                            "          \n" +
+                            "       o  \n" +
+                            "          \n" +
+                            "          \n" +
+                            "          \n" +
+                            "          \n" +
+                            "       o  \n" +
+                            "          \n" +
+                            "          "
         //when
         //then
-        def controlList = ["               ",
-                           "               ",
-                           "  o    o    o  ",
-                           "               ",
-                           "               ",
-                           "          ",
-                           "          ",
-                           "       o  ",
-                           "          ",
-                           "          ",
-                           "          ",
-                           "          ",
-                           "       o  ",
-                           "          ",
-                           "          ",
-                           "          ",
-                           "          ",
-                           "       o  ",
-                           "          ",
-                           "          "] as String[]
-        assertThat Printer.encodeFaces(cube), IsIterableContainingInOrder.contains(controlList)
+        assertThat cube.toString(), equalTo(controlString)
 
     }
 
@@ -471,56 +470,56 @@ public class TaskSecondTestSuite {
                         [1, 1, 1, 1, 0],
                         [0, 1, 1, 1, 0],
                         [0, 1, 1, 1, 1],
-                        [0, 1, 1, 1, 1],
-                ],
-                [
-                        [0, 1, 1, 1, 1],
-                        [0, 1, 1, 1, 1],
-                        [0, 1, 1, 1, 0],
-                        [1, 1, 1, 1, 0],
-                        [0, 0, 1, 1, 1],
-                ],
-                [
-                        [0, 0, 0, 1, 0],
-                        [1, 1, 1, 1, 0],
-                        [1, 1, 1, 1, 1],
-                        [1, 1, 1, 1, 1],
-                        [1, 1, 0, 0, 1],
-                ],
-                [
-                        [0, 1, 0, 0, 0],
-                        [0, 1, 1, 1, 1],
-                        [1, 1, 1, 1, 1],
-                        [1, 1, 1, 1, 1],
-                        [1, 0, 0, 1, 1],
-                ],
-                [
-                        [1, 1, 1, 1, 0],
-                        [1, 1, 1, 1, 0],
-                        [0, 1, 1, 1, 0],
-                        [0, 1, 1, 1, 1],
-                        [1, 1, 1, 0, 0],
+                        [0, 1, 1, 1, 1]
                 ],
                 [
                         [1, 1, 1, 0, 0],
                         [0, 1, 1, 1, 1],
                         [0, 1, 1, 1, 0],
                         [1, 1, 1, 1, 0],
-                        [1, 1, 1, 1, 0],
+                        [1, 1, 1, 1, 0]
                 ],
                 [
-                        [1, 0, 0, 1, 1],
+                        [0, 0, 0, 1, 0],
+                        [1, 1, 1, 1, 0],
                         [1, 1, 1, 1, 1],
                         [1, 1, 1, 1, 1],
-                        [0, 1, 1, 1, 1],
-                        [0, 1, 0, 0, 0],
+                        [1, 1, 0, 0, 1]
                 ],
                 [
                         [1, 1, 0, 0, 1],
                         [1, 1, 1, 1, 1],
                         [1, 1, 1, 1, 1],
                         [1, 1, 1, 1, 0],
-                        [0, 0, 0, 1, 0],
+                        [0, 0, 0, 1, 0]
+                ],
+                [
+                        [1, 1, 1, 1, 0],
+                        [1, 1, 1, 1, 0],
+                        [0, 1, 1, 1, 0],
+                        [0, 1, 1, 1, 1],
+                        [1, 1, 1, 0, 0]
+                ],
+                [
+                        [0, 1, 1, 1, 1],
+                        [0, 1, 1, 1, 1],
+                        [0, 1, 1, 1, 0],
+                        [1, 1, 1, 1, 0],
+                        [0, 0, 1, 1, 1]
+                ],
+                [
+                        [1, 0, 0, 1, 1],
+                        [1, 1, 1, 1, 1],
+                        [1, 1, 1, 1, 1],
+                        [0, 1, 1, 1, 1],
+                        [0, 1, 0, 0, 0]
+                ],
+                [
+                        [0, 1, 0, 0, 0],
+                        [0, 1, 1, 1, 1],
+                        [1, 1, 1, 1, 1],
+                        [1, 1, 1, 1, 1],
+                        [1, 0, 0, 1, 1]
                 ]
         ]
 
@@ -535,7 +534,7 @@ public class TaskSecondTestSuite {
     @Test
     public void shouldAssembleCube() {
         //given
-        CubeASCII blueCube = new CubeASCII();
+        CubeASCII blueCube = new CubeASCII("blueCube.txt");
         CubeAssembler assembler = new CubeAssembler();
         //when
         assembler.assembleCube(blueCube);

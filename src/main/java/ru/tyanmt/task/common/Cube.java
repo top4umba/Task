@@ -1,15 +1,20 @@
 package ru.tyanmt.task.common;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.function.Function;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static ru.tyanmt.task.common.FaceMapper.*;
-import static ru.tyanmt.task.common.FaceMergeValidator.*;
+import static ru.tyanmt.task.common.FaceMergeValidator.isEdge;
+import static ru.tyanmt.task.common.FaceMergeValidator.isVertex;
+import static ru.tyanmt.task.common.FacePosition.LEFT;
+import static ru.tyanmt.task.common.FacePosition.REAR;
 
 public class Cube {
 
     public static final int FACE_LENGTH = 5;
+    private static final int FACES_IN_FIRST_ROW = 3;
     private final int[][][] cube = new int[FACE_LENGTH][FACE_LENGTH][FACE_LENGTH];
 
     public Cube() {
@@ -25,18 +30,18 @@ public class Cube {
     }
 
     public Face getFace(FacePosition position) {
-        Face face = new Face();
+        int[][] matrix = new int[FACE_LENGTH][FACE_LENGTH];
+        int[][] neighborFaces = new int[FACE_LENGTH][FACE_LENGTH];
         IntStream.range(0, FACE_LENGTH).forEach(x ->
                         IntStream.range(0, FACE_LENGTH).forEach(y -> {
-                                    face.setPoint(x, y, getPointFromFace(position, x, y, cube));
+                                    matrix[x][y] = position.getPoint(x, y, cube);
                                     if (isEdge(x, y) && !isVertex(x, y)) {
-                                        face.setNeighborAt(x, y, getPointFromNeighborFace(position, x, y, cube));
+                                        neighborFaces[x][y] = position.getPointFromNeighbor(x, y, cube);
                                     }
                                 }
                         )
         );
-
-        return face;
+        return new Face(matrix, neighborFaces);
     }
 
     public boolean tryPutFaceOn(FacePosition position, Face faceCandidate) {
@@ -50,8 +55,48 @@ public class Cube {
         IntStream.range(0, FACE_LENGTH).forEach(x ->
                         IntStream.range(0, FACE_LENGTH).forEach(y -> {
                                     if (face.getPoint(x, y) != 0) {
-                                        setPointToFace(position, x, y, cube);
+                                        position.setPoint(x, y, cube);
                                     }
+                                }
+                        )
+        );
+    }
+
+    @Override
+    public String toString() {
+
+        List<Face> faces = Arrays.stream(FacePosition.values())
+                .map(position -> position == REAR || position == LEFT ?
+                                this.getFace(position).flip().transpose() :
+                                this.getFace(position).transpose()
+                ).collect(Collectors.toList());
+        StringBuilder textCube = new StringBuilder();
+        encodeFacesHorizontally(faces, textCube);
+        encodeFacesVertically(faces, textCube);
+        textCube.setLength(textCube.length()-1);
+        return textCube.toString();
+    }
+
+    private void encodeFacesHorizontally(List<Face> faces, StringBuilder textCube) {
+        IntStream.range(0, FACE_LENGTH).forEach(x -> encodeHorizontalLine(faces, x, textCube));
+    }
+
+    private void encodeHorizontalLine(List<Face> faces, int x, StringBuilder textCube) {
+        IntStream.rangeClosed(1, FACES_IN_FIRST_ROW).forEach(faceNumber ->
+                        IntStream.range(0, FACE_LENGTH).forEach(y ->
+                                        textCube.append(faces.get(faceNumber - 1).getPoint(x, y) == faceNumber ? "o" : " ")
+                        )
+        );
+        textCube.append("\n");
+    }
+
+    private void encodeFacesVertically(List<Face> faces, StringBuilder textCube) {
+        IntStream.range(FACES_IN_FIRST_ROW + 1, 7).forEach(faceNumber ->
+                        IntStream.range(0, FACE_LENGTH).forEach(x -> {
+                                    IntStream.range(0, FACE_LENGTH).forEach(i -> textCube.append(" "));
+                                    IntStream.range(0, FACE_LENGTH).forEach(y ->
+                                            textCube.append(faces.get(faceNumber - 1).getPoint(x, y) == faceNumber ? "o" : " "));
+                                    textCube.append("\n");
                                 }
                         )
         );

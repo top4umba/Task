@@ -5,22 +5,27 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static ru.tyanmt.task.common.Cube.FACE_LENGTH;
-
 public class Face {
 
-    private final int[][] matrix = new int[FACE_LENGTH][FACE_LENGTH];
-    private final int[][] neighborFaces = new int[FACE_LENGTH][FACE_LENGTH];
+    private final int FACE_LENGTH;
+    private final int[][] matrix;
+    private final int[][] neighborFaces;
 
-    public Face() {
+
+    public Face(int[][] matrix) {
+        this.FACE_LENGTH = matrix.length;
+        this.matrix = new int[FACE_LENGTH][FACE_LENGTH];
+        this.neighborFaces = new int[FACE_LENGTH][FACE_LENGTH];
+        copyMatrix(this.matrix, matrix);
     }
 
-    private Face(int[][] matrix) {
-        IntStream.range(0, FACE_LENGTH).forEach(i -> this.matrix[i] = Arrays.copyOf(matrix[i], FACE_LENGTH));
+    public Face(int[][] matrix, int[][] neighborFaces) {
+        this(matrix);
+        copyMatrix(this.neighborFaces, neighborFaces);
     }
 
-    public void setPoint(int x, int y, int value) {
-        matrix[x][y] = value;
+    private void copyMatrix(int[][] toMatrix, int[][] fromMatrix) {
+        IntStream.range(0, FACE_LENGTH).forEach(i -> toMatrix[i] = Arrays.copyOf(fromMatrix[i], FACE_LENGTH));
     }
 
     public int getPoint(int x, int y) {
@@ -29,10 +34,6 @@ public class Face {
 
     public int getNeighborAt(int x, int y) {
         return neighborFaces[x][y];
-    }
-
-    public void setNeighborAt(int x, int y, int value) {
-        neighborFaces[x][y] = value;
     }
 
     public List<Face> getRotateOptions() {
@@ -48,14 +49,6 @@ public class Face {
         return result;
     }
 
-    public Face flip() {
-        int[][] flippedMatrix = new int[FACE_LENGTH][FACE_LENGTH];
-        IntStream.range(0, FACE_LENGTH).forEach(x ->
-                        flippedMatrix[x] = matrix[FACE_LENGTH - 1 - x]
-        );
-        return new Face(flippedMatrix);
-    }
-
     public Face rotateClockwise() {
         int[][] rotatedMatrix = new int[FACE_LENGTH][FACE_LENGTH];
         IntStream.range(0, FACE_LENGTH).forEach(x ->
@@ -66,7 +59,7 @@ public class Face {
         return new Face(rotatedMatrix);
     }
 
-    public Face flipHorizontally() {
+    public Face flip() {
         int[][] flippedMatrix = new int[FACE_LENGTH][FACE_LENGTH];
         IntStream.range(0, FACE_LENGTH).forEach(x ->
                         IntStream.range(0, FACE_LENGTH).forEach(y ->
