@@ -1,3 +1,5 @@
+package ru.tyanmt.task
+
 import org.junit.Test
 import ru.tyanmt.task.common.Cube
 import ru.tyanmt.task.common.CubeASCII
@@ -6,9 +8,7 @@ import ru.tyanmt.task.common.FaceMergeValidator
 import ru.tyanmt.task.solution.CubeAssembler
 
 import static org.hamcrest.Matchers.equalTo
-import static org.junit.Assert.assertFalse
-import static org.junit.Assert.assertThat
-import static org.junit.Assert.assertTrue
+import static org.junit.Assert.*
 import static ru.tyanmt.task.common.FacePosition.*
 
 public class TaskSecondTestSuite {
@@ -26,7 +26,7 @@ public class TaskSecondTestSuite {
         ]
         CubeASCII cube = new CubeASCII("blueCube.txt");
         //when
-        Face face = cube.readFace(2);
+        Face face = cube.readFace 2;
         //then
         assertTrue Arrays.deepEquals(face.matrix, controlFace)
     }
@@ -43,13 +43,13 @@ public class TaskSecondTestSuite {
         ]
         CubeASCII cube = new CubeASCII("blueCube.txt");
         //when
-        Face face = cube.readFace(5);
+        Face face = cube.readFace 5;
         //then
         assertTrue Arrays.deepEquals(face.matrix, controlFace)
     }
 
     @Test
-    public void shouldConnectMatrixWhenAllSidesAreFilled() {
+    public void shouldMergeFacesWhenAllSidesAreFilled() {
         //given
         int[][] faceCandidateMatrix = [
                 [0, 1, 0, 1, 0],
@@ -81,7 +81,7 @@ public class TaskSecondTestSuite {
     }
 
     @Test
-    public void shouldConnectMatricesWhenOnlyVertexIsNotFilledAndAdjacentFaceIsEmpty() {
+    public void shouldMergeFacesWhenOnlyVertexIsNotFilledAndNeighborFaceIsEmpty() {
         //given
         int[][] faceCandidateMatrix = [
                 [0, 0, 0, 0, 0],
@@ -114,7 +114,7 @@ public class TaskSecondTestSuite {
     }
 
     @Test
-    public void shouldNotConnectMatrixWhenMatricesIntersected() {
+    public void shouldNotMergeFacesWhenMatricesIntersect() {
         //given
         int[][] faceCandidateMatrix = [
                 [0, 1, 0, 1, 0],
@@ -146,7 +146,7 @@ public class TaskSecondTestSuite {
     }
 
     @Test
-    public void shouldNotConnectMatrixWhenMatricesDontFillFace() {
+    public void shouldNotMergeFacesWhenNotFilledPointsExist() {
         //given
         int[][] faceCandidateMatrix = [
                 [0, 1, 0, 1, 0],
@@ -224,7 +224,7 @@ public class TaskSecondTestSuite {
     }
 
     @Test
-    public void shouldReturnTop() {
+    public void shouldReturnTopFace() {
         //given
         int[][] topFace = [
                 [0, 2, 2, 0, 0],
@@ -278,7 +278,7 @@ public class TaskSecondTestSuite {
     }
 
     @Test
-    public void shouldPlaceOnTop() {
+    public void shouldPutOnTopFace() {
         //given
         int[][] face = [
                 [3, 0, 0, 3, 3],
@@ -328,10 +328,10 @@ public class TaskSecondTestSuite {
         Cube cube = new Cube();
         initCube(cube, cubeArray)
         //when
-        cube.tryPutFaceOn(TOP, new Face(face))
-        Face topFace = cube.getFace(TOP)
+        boolean faceWasPut = cube.tryPutFaceOn(TOP, new Face(face))
         //then
-        assertTrue Arrays.deepEquals(controlFace, topFace.matrix)
+        assertTrue faceWasPut
+        assertTrue Arrays.deepEquals(controlFace, cube.getFace(TOP).matrix)
     }
 
 
@@ -428,25 +428,25 @@ public class TaskSecondTestSuite {
         initCube(cube, cubeArray)
 
         def controlString = "               \n" +
-                            "               \n" +
-                            "  o    o    o  \n" +
-                            "               \n" +
-                            "               \n" +
-                            "          \n" +
-                            "          \n" +
-                            "       o  \n" +
-                            "          \n" +
-                            "          \n" +
-                            "          \n" +
-                            "          \n" +
-                            "       o  \n" +
-                            "          \n" +
-                            "          \n" +
-                            "          \n" +
-                            "          \n" +
-                            "       o  \n" +
-                            "          \n" +
-                            "          "
+                "               \n" +
+                "  o    o    o  \n" +
+                "               \n" +
+                "               \n" +
+                "          \n" +
+                "          \n" +
+                "       o  \n" +
+                "          \n" +
+                "          \n" +
+                "          \n" +
+                "          \n" +
+                "       o  \n" +
+                "          \n" +
+                "          \n" +
+                "          \n" +
+                "          \n" +
+                "       o  \n" +
+                "          \n" +
+                "          \n"
         //when
         //then
         assertThat cube.toString(), equalTo(controlString)

@@ -14,22 +14,20 @@ import static ru.tyanmt.task.common.Cube.FACE_LENGTH;
 
 public class CubeASCII {
     private static final int FACES_IN_ROW = 3;
-
     private final String text;
-
     private final List<Face> faces;
 
-    public CubeASCII(String fileName) {
+    public CubeASCII(String resourceName) {
         try {
-            Path file = Paths.get(ClassLoader.getSystemResource(fileName).toURI());
-            text = Files.lines(file).map(line -> pad(line)).collect(Collectors.joining());
+            Path file = Paths.get(ClassLoader.getSystemResource(resourceName).toURI());
+            text = Files.lines(file).map(this::pad).collect(Collectors.joining());
             faces = readFaces();
         } catch (URISyntaxException | IOException e) {
-            throw new RuntimeException("Cannot read " + fileName, e);
+            throw new RuntimeException("Cannot read " + resourceName, e);
         }
     }
 
-    public List<Face> getFaces(){
+    public List<Face> getFaces() {
         return new ArrayList<>(faces);
     }
 
@@ -76,7 +74,7 @@ public class CubeASCII {
     }
 
     private String pad(String line) {
-        return String.format("%1$-"+FACE_LENGTH*FACES_IN_ROW+"s",line);
+        return String.format("%1$-" + FACE_LENGTH * FACES_IN_ROW + "s", line);
     }
 
 }

@@ -1,12 +1,11 @@
 package ru.tyanmt.task.common;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static ru.tyanmt.task.common.FaceMergeValidator.isEdge;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 import static ru.tyanmt.task.common.FaceMergeValidator.isVertex;
 import static ru.tyanmt.task.common.FacePosition.LEFT;
 import static ru.tyanmt.task.common.FacePosition.REAR;
@@ -51,6 +50,16 @@ public class Cube {
         return true;
     }
 
+    @Override
+    public String toString() {
+        List<Face> faces = Arrays.stream(FacePosition.values())
+                .map(position -> position == REAR || position == LEFT ?
+                                this.getFace(position).flip().transpose() :
+                                this.getFace(position).transpose()
+                ).collect(toList());
+        return encodeFacesHorizontally(faces) + encodeFacesVertically(faces);
+    }
+
     private void addFaceOnSide(FacePosition position, Face face) {
         IntStream.range(0, FACE_LENGTH).forEach(x ->
                         IntStream.range(0, FACE_LENGTH).forEach(y -> {
@@ -62,43 +71,48 @@ public class Cube {
         );
     }
 
-    @Override
-    public String toString() {
-
-        List<Face> faces = Arrays.stream(FacePosition.values())
-                .map(position -> position == REAR || position == LEFT ?
-                                this.getFace(position).flip().transpose() :
-                                this.getFace(position).transpose()
-                ).collect(Collectors.toList());
-        StringBuilder textCube = new StringBuilder();
-        encodeFacesHorizontally(faces, textCube);
-        encodeFacesVertically(faces, textCube);
-        textCube.setLength(textCube.length()-1);
-        return textCube.toString();
+    private boolean isEdge(int x, int y) {
+        return x == 0 || x == FACE_LENGTH - 1 || y == 0 || y == FACE_LENGTH - 1;
     }
 
-    private void encodeFacesHorizontally(List<Face> faces, StringBuilder textCube) {
-        IntStream.range(0, FACE_LENGTH).forEach(x -> encodeHorizontalLine(faces, x, textCube));
+    private String encodeFacesHorizontally(List<Face> faces) {
+        return IntStream.range(0, FACE_LENGTH)
+                .mapToObj(x -> encodeHorizontalLine(faces, x))
+                .collect(joining("\n")) + "\n";
     }
 
-    private void encodeHorizontalLine(List<Face> faces, int x, StringBuilder textCube) {
+    private String encodeHorizontalLine(List<Face> faces, int x) {
+        StringBuilder builder = new StringBuilder();
         IntStream.rangeClosed(1, FACES_IN_FIRST_ROW).forEach(faceNumber ->
                         IntStream.range(0, FACE_LENGTH).forEach(y ->
-                                        textCube.append(faces.get(faceNumber - 1).getPoint(x, y) == faceNumber ? "o" : " ")
+                                        builder.append(getSign(faces, faceNumber, x, y))
                         )
         );
-        textCube.append("\n");
+        return builder.toString();
     }
 
-    private void encodeFacesVertically(List<Face> faces, StringBuilder textCube) {
-        IntStream.range(FACES_IN_FIRST_ROW + 1, 7).forEach(faceNumber ->
-                        IntStream.range(0, FACE_LENGTH).forEach(x -> {
-                                    IntStream.range(0, FACE_LENGTH).forEach(i -> textCube.append(" "));
-                                    IntStream.range(0, FACE_LENGTH).forEach(y ->
-                                            textCube.append(faces.get(faceNumber - 1).getPoint(x, y) == faceNumber ? "o" : " "));
-                                    textCube.append("\n");
-                                }
-                        )
-        );
+    private String encodeFacesVertically(List<Face> faces) {
+        return IntStream.range(FACES_IN_FIRST_ROW + 1, 7)
+                .mapToObj(faceNumber -> encodeAFaceVertically(faces, faceNumber))
+                .collect(joining());
     }
+
+    private String encodeAFaceVertically(List<Face> faces, Integer faceNumber) {
+        return IntStream.range(0, FACE_LENGTH)
+                .mapToObj(x -> IntStream.range(0, FACE_LENGTH)
+                        .mapToObj(y -> getSign(faces, faceNumber, x, y))
+                        .collect(joining()))
+                .map(this::pad)
+                .collect(joining("\n")) + "\n";
+    }
+
+    private String getSign(List<Face> faces, int faceNumber, int x, int y) {
+        return faces.get(faceNumber - 1).getPoint(x, y) == faceNumber ? "o" : " ";
+    }
+
+    private String pad(String line) {
+        return String.format("%1$" + FACE_LENGTH * 2 + "s", line);
+    }
+
+
 }

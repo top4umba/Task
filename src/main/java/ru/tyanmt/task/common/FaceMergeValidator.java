@@ -40,8 +40,8 @@ public class FaceMergeValidator {
         return (x, y) -> !isVertex(x, y) && !isNeighborFaceEmpty(x, y);
     }
 
-    private int getNeighborCoordinate(int x) {
-        return x == 0 ? 1 : penultimateIndex();
+    private int getNeighborCoordinate(int i) {
+        return i == 0 ? 1 : penultimateIndex();
     }
 
     private boolean isEmpty(int value) {
@@ -58,10 +58,6 @@ public class FaceMergeValidator {
 
     public static boolean isVertex(int x, int y) {
         return (x == 0 || x == lastIndex()) && (y == 0 || y == lastIndex());
-    }
-
-    public static boolean isEdge(int x, int y) {
-        return x == 0 || x == lastIndex() || y == 0 || y == lastIndex();
     }
 
     private static int lastIndex() {

@@ -24,10 +24,6 @@ public class Face {
         copyMatrix(this.neighborFaces, neighborFaces);
     }
 
-    private void copyMatrix(int[][] toMatrix, int[][] fromMatrix) {
-        IntStream.range(0, FACE_LENGTH).forEach(i -> toMatrix[i] = Arrays.copyOf(fromMatrix[i], FACE_LENGTH));
-    }
-
     public int getPoint(int x, int y) {
         return matrix[x][y];
     }
@@ -49,16 +45,6 @@ public class Face {
         return result;
     }
 
-    public Face rotateClockwise() {
-        int[][] rotatedMatrix = new int[FACE_LENGTH][FACE_LENGTH];
-        IntStream.range(0, FACE_LENGTH).forEach(x ->
-                        IntStream.range(0, FACE_LENGTH).forEach(y ->
-                                        rotatedMatrix[y][FACE_LENGTH - 1 - x] = matrix[x][y]
-                        )
-        );
-        return new Face(rotatedMatrix);
-    }
-
     public Face flip() {
         int[][] flippedMatrix = new int[FACE_LENGTH][FACE_LENGTH];
         IntStream.range(0, FACE_LENGTH).forEach(x ->
@@ -77,5 +63,19 @@ public class Face {
                         )
         );
         return new Face(transposedMatrix);
+    }
+
+    private void copyMatrix(int[][] toMatrix, int[][] fromMatrix) {
+        IntStream.range(0, FACE_LENGTH).forEach(i -> toMatrix[i] = Arrays.copyOf(fromMatrix[i], FACE_LENGTH));
+    }
+
+    private Face rotateClockwise() {
+        int[][] rotatedMatrix = new int[FACE_LENGTH][FACE_LENGTH];
+        IntStream.range(0, FACE_LENGTH).forEach(x ->
+                        IntStream.range(0, FACE_LENGTH).forEach(y ->
+                                        rotatedMatrix[y][FACE_LENGTH - 1 - x] = matrix[x][y]
+                        )
+        );
+        return new Face(rotatedMatrix);
     }
 }

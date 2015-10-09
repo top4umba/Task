@@ -16,7 +16,7 @@ public enum FacePosition {
 
         @Override
         public void setPoint(int i, int j, int[][][] cube) {
-            cube[0][i][j] = this.ordinal()+1;
+            cube[0][i][j] = this.ordinal() + 1;
         }
     }, FRONT {
         @Override
@@ -31,7 +31,7 @@ public enum FacePosition {
 
         @Override
         public void setPoint(int i, int j, int[][][] cube) {
-            cube[i][0][j] = this.ordinal()+1;
+            cube[i][0][j] = this.ordinal() + 1;
         }
     }, TOP {
         @Override
@@ -46,7 +46,7 @@ public enum FacePosition {
 
         @Override
         public void setPoint(int i, int j, int[][][] cube) {
-            cube[cube.length - 1][i][j] = this.ordinal()+1;
+            cube[cube.length - 1][i][j] = this.ordinal() + 1;
         }
     }, RIGHT {
         @Override
@@ -61,7 +61,7 @@ public enum FacePosition {
 
         @Override
         public void setPoint(int i, int j, int[][][] cube) {
-            cube[i][j][cube.length - 1] = this.ordinal()+1;
+            cube[i][j][cube.length - 1] = this.ordinal() + 1;
         }
     }, REAR {
         @Override
@@ -76,7 +76,7 @@ public enum FacePosition {
 
         @Override
         public void setPoint(int i, int j, int[][][] cube) {
-            cube[i][cube.length - 1][j] = this.ordinal()+1;
+            cube[i][cube.length - 1][j] = this.ordinal() + 1;
         }
     }, LEFT {
         @Override
@@ -91,7 +91,7 @@ public enum FacePosition {
 
         @Override
         public void setPoint(int i, int j, int[][][] cube) {
-            cube[i][j][0] = this.ordinal()+1;
+            cube[i][j][0] = this.ordinal() + 1;
         }
     };
 
@@ -102,15 +102,17 @@ public enum FacePosition {
     public abstract void setPoint(int i, int j, int[][][] cube);
 
     public FacePosition next() {
-        if (isLast()) throw new NoSuchElementException("Enumeration doesn't have next element");
+        if (isLast()) {
+            throw new NoSuchElementException("Enumeration doesn't have next element");
+        }
         return FacePosition.values()[this.ordinal() + 1];
     }
 
     public boolean hasNext() {
-        return this.ordinal() < FacePosition.values().length-1;
+        return this.ordinal() < FacePosition.values().length - 1;
     }
 
     private boolean isLast() {
-        return this.ordinal() == FacePosition.values().length-1;
+        return this.ordinal() == FacePosition.values().length - 1;
     }
 }

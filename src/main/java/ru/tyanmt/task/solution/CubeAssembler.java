@@ -9,11 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * Created by mityan on 03.08.2015.
- */
 public class CubeAssembler {
-    List<Cube> solutions = new ArrayList<>();
+    private final List<Cube> solutions = new ArrayList<>();
 
     public List<Cube> getSolutions() {
         return solutions;
