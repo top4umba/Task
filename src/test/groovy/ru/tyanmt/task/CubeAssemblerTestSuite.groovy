@@ -11,7 +11,7 @@ import static org.hamcrest.Matchers.equalTo
 import static org.junit.Assert.*
 import static ru.tyanmt.task.common.FacePosition.*
 
-public class TaskSecondTestSuite {
+public class CubeAssemblerTestSuite {
 
 
     @Test
