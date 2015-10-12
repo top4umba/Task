@@ -1,11 +1,11 @@
 package ru.tyanmt.task.common;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -19,7 +19,7 @@ public class CubeASCII {
 
     public CubeASCII(String resourceName) {
         try {
-            Path file = Paths.get(ClassLoader.getSystemResource(resourceName).toURI());
+            Path file = getPath(resourceName);
             text = Files.lines(file).map(this::pad).collect(Collectors.joining());
             faces = readFaces();
         } catch (URISyntaxException | IOException e) {
@@ -75,6 +75,27 @@ public class CubeASCII {
 
     private String pad(String line) {
         return String.format("%1$-" + FACE_LENGTH * FACES_IN_ROW + "s", line);
+    }
+
+    private Path getPath(String resourceName) throws URISyntaxException, IOException {
+        URI uri = ClassLoader.getSystemResource(resourceName).toURI();
+        if (isResourceInJar(uri)) {
+            return getPathFromFileSystem(uri);
+        } else {
+            return Paths.get(uri);
+        }
+    }
+
+    private boolean isResourceInJar(URI uri) {
+        return uri.toString().contains("!");
+    }
+
+    private Path getPathFromFileSystem(URI uri) throws IOException {
+        String[] uriSplit = uri.toString().split("!");
+        //TODO Close File System after reading of file
+        try (FileSystem fs = FileSystems.newFileSystem(URI.create(uriSplit[0]), Collections.<String, Object>emptyMap())) {
+            return fs.getPath(uriSplit[1]);
+        }
     }
 
 }
