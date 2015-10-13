@@ -92,10 +92,7 @@ public class CubeASCII {
 
     private Path getPathFromFileSystem(URI uri) throws IOException {
         String[] uriSplit = uri.toString().split("!");
-        //TODO Close File System after reading of file
-        try (FileSystem fs = FileSystems.newFileSystem(URI.create(uriSplit[0]), Collections.<String, Object>emptyMap())) {
-            return fs.getPath(uriSplit[1]);
-        }
+        return FileSystems.newFileSystem(URI.create(uriSplit[0]), Collections.<String, Object>emptyMap()).getPath(uriSplit[1]);
     }
 
 }
