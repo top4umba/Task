@@ -17,7 +17,6 @@ public class Cube {
     private final int[][][] cube = new int[FACE_LENGTH][FACE_LENGTH][FACE_LENGTH];
 
     public Cube() {
-
     }
 
     public Cube(Cube cube) {
@@ -45,7 +44,9 @@ public class Cube {
 
     public boolean tryPutFaceOn(FacePosition position, Face faceCandidate) {
         Face cubeFace = this.getFace(position);
-        if (!new FaceMergeValidator(faceCandidate, cubeFace).validate()) return false;
+        if (!new FaceMergeValidator(faceCandidate, cubeFace).validate()) {
+            return false;
+        }
         addFaceOnSide(position, faceCandidate);
         return true;
     }
