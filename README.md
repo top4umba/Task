@@ -3,6 +3,7 @@ http://www.happycube.com/
 
 Here is an example:
 The pieces of the blue cube look as follows:
+<pre>
   o  o o o  o  
  ooo ooooo oooo
 ooooo ooo oooo 
@@ -13,8 +14,9 @@ oooo ooooo oooo
  oooo ooo oooo 
 oooo ooooo oooo
 oo o o o  oo oo
-
+</pre>
 One of the solutions in "unfolded form" looks as follows:
+<pre>
   o    o o o o 
  ooo ooooo ooo 
 ooooo ooo ooooo
@@ -35,7 +37,7 @@ ooooo ooo ooooo
       oooo     
      oooo      
      oo o      
-
+</pre>
 Additional challenge 1 : All unique solutions :
 In the base task you are only required to find one solution and to
 print it into a file. The additional challenge 1 is to extend your
@@ -47,8 +49,10 @@ Additional challenge 2 : How many different cubes exist :
 In the file that you got together with this description you can see
 the pieces of 4 different cubes. The pieces are such that you can plug
 them together in a plane in the order:
+<pre>
  1 2 3
  4 5 6
+ </pre>
 And you can create a cube out of them. How many different sets of
 pieces that fulfill these two criteria exist? One set is different
 from the other if not all pieces in one set have a corresponding
@@ -56,16 +60,20 @@ matching piece in the other set. A corresponding matching piece is a
 piece into which you can transform your piece at hand by rotating or
 mirroring it in two dimensions. No side of a piece must be "flat",
 e.g. a piece that looks like this:
+<pre>
  ooooo
  ooooo
  ooooo
  ooooo
  ooooo
+ </pre>
 would not be allowed. The piece must be physikal producible, e.g a
 piece that has a corner like this is not allowed:
+<pre>
      o
  oooo 
  oooo 
  oooo 
  oooo 
+ </pre>
 Here the corner would easily break and fall off.
